@@ -23,6 +23,10 @@ module.exports = {
                     text: "基础",
                     items: [
                         {
+                            text: "介绍",
+                            link: "/web/introduction",
+                        },
+                        {
                             text: "数据结构与算法",
                             link: "/web/algorithm",
                         },
