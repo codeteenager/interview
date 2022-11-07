@@ -8,21 +8,31 @@ module.exports = {
         nav: [
             {
                 text: '前端面试题',
-                items: [
-                    { text: "手写JS", link: "/js/program" }
-                ]
+                link: "/web/algorithm"
             }
         ],
+        footer: {
+            message: 'Released under the MIT License.',
+            copyright: 'Copyright © 2022-present Codeteenager'
+        },
         socialLinks: [{ icon: "github", link: "https://github.com/codeteenager/interview" }],
         sidebar: {
-            "/js/": [
+            "/web/": [
 
                 {
                     text: "基础",
                     items: [
                         {
+                            text: "数据结构与算法",
+                            link: "/web/algorithm",
+                        },
+                        {
                             text: "手写题",
-                            link: "/js/program",
+                            link: "/web/program",
+                        },
+                        {
+                            text: "其他面经",
+                            link: "/web/other",
                         }
                     ],
                 }
