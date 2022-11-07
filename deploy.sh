@@ -2,8 +2,6 @@
 
 set -e
 
-npm run build
-
 cd docs/.vitepress/dist
 
 # if you are deploying to a custom domain
