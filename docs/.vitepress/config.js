@@ -35,12 +35,20 @@ module.exports = {
                             link: "/web/program",
                         },
                         {
+                            text: "Vue面试题",
+                            link: "/web/vue",
+                        },
+                        {
                             text: "其他面经",
                             link: "/web/other",
                         }
                     ],
                 }
             ],
+        },
+        docFooter: {
+            prev: '上一页',
+            next: '下一页'
         }
     }
 }
