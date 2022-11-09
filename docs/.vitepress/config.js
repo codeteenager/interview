@@ -2,6 +2,10 @@ module.exports = {
     title: '前端面试八股文',
     description: '前端面试八股文',
     base: '/interview/',
+    markdown: {
+        lineNumbers: true, //显示代码行数
+    },
+    lastUpdated: true,
     themeConfig: {
         // siteTitle: false,
         // logo: "/logo.svg",
@@ -11,6 +15,7 @@ module.exports = {
                 link: "/web/algorithm"
             }
         ],
+        author: '姜帅杰',
         footer: {
             message: 'Released under the MIT License.',
             copyright: 'Copyright © 2022-present Codeteenager'
