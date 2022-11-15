@@ -6,6 +6,9 @@ module.exports = {
         lineNumbers: true, //显示代码行数
     },
     lastUpdated: true,
+    head: [
+        ['link', { rel: 'icon', href: '/interview/favicon.ico' }]
+    ],
     themeConfig: {
         // siteTitle: false,
         // logo: "/logo.svg",
@@ -15,7 +18,8 @@ module.exports = {
                 link: "/web/algorithm"
             }
         ],
-        author: '姜帅杰',
+        outlineTitle: '在本页面',
+        lastUpdatedText: '最近更新时间',
         footer: {
             message: 'Released under the MIT License.',
             copyright: 'Copyright © 2022-present Codeteenager'
