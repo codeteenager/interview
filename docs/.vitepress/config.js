@@ -10,8 +10,6 @@ module.exports = {
         ['link', { rel: 'icon', href: '/interview/favicon.ico' }]
     ],
     themeConfig: {
-        // siteTitle: false,
-        // logo: "/logo.svg",
         nav: [
             {
                 text: '前端面试题',
@@ -22,7 +20,7 @@ module.exports = {
         lastUpdatedText: '最近更新时间',
         footer: {
             message: 'Released under the MIT License.',
-            copyright: 'Copyright © 2022-present Codeteenager'
+            copyright: 'Copyright © 2022-present codeteenager'
         },
         socialLinks: [{ icon: "github", link: "https://github.com/codeteenager/interview" }],
         sidebar: {
@@ -42,6 +40,10 @@ module.exports = {
                         {
                             text: "手写题",
                             link: "/web/program",
+                        },
+                        {
+                            text: "JavaScript",
+                            link: "/web/javascript",
                         },
                         {
                             text: "Vue面试题",
