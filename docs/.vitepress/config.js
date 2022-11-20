@@ -50,6 +50,10 @@ module.exports = {
                             link: "/web/vue",
                         },
                         {
+                            text: "面试套路",
+                            link: "/web/skills",
+                        },
+                        {
                             text: "其他面经",
                             link: "/web/other",
                         }
