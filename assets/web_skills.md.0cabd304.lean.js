@@ -1,1 +1,0 @@
-import{_ as e,c as r,o as t,a}from"./app.ef24e9b9.js";const u=JSON.parse('{"title":"\u9762\u8BD5\u5957\u8DEF","description":"","frontmatter":{},"headers":[],"relativePath":"web/skills.md","lastUpdated":1668943146000}'),n={name:"web/skills.md"},l=a("",2),i=[l];function s(o,f,p,h,_,j){return t(),r("div",null,i)}const k=e(n,[["render",s]]);export{u as __pageData,k as default};
