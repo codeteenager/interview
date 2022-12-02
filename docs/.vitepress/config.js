@@ -46,6 +46,10 @@ module.exports = {
                             link: "/web/javascript",
                         },
                         {
+                            text: "网络",
+                            link: "/web/network",
+                        },
+                        {
                             text: "Vue面试题",
                             link: "/web/vue",
                         },
