@@ -80,6 +80,8 @@ Vue.js采用数据劫持结合发布者-订阅者模式的方式，通过Object.
 
 第四步：MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的Model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile间的通信“桥梁”，达到“数据变化→视图更新、视图交互变化→Model数据变更”的双向绑定效果。
 
+![](/vue/2.png)
+
 ## `<transition>`和`<transition-group>`有什么区别?
 唯一的区别就是`<transition>`中只能包裹一个元素，而`<transition-group>`可以包裹多个元素。
 
@@ -115,3 +117,137 @@ $route是“路由信息”对象，包括path、params、hash、query、fullPat
 1. 全局导航钩子。router.beforeEach(to,from,next)，作用是跳转前进行判断拦截。
 2. 组件内的钩子。
 3. 单独路由独享组件。
+
+## Vue的基本原理
+当一个Vue实例创建时，Vue会遍历data中的属性，用Object.defineProperty(vue3.0 使用 proxy)将它们转为getter/setter，并且在内部追踪相关依赖，在属性被访问和修改时通知变化。 每个组件实例都有相应的 watcher 程序实例，它会在组件渲染的过程中把属性记录为依赖，之后当依赖项的 setter 被调用时，会通知 watcher 重新计算，从而致使它关联的组件得以更新。
+
+![](/vue/1.png)
+
+## MVVM、MVC、MVP的区别
+MVC、MVP和MVVM是三种常见的软件架构设计模式，主要通过分离关注点的方式来组织代码结构，优化开发效率。
+在开发单页面应用时，往往一个路由页面对应了一个脚本文件，所有的页面逻辑都在一个脚本文件里。页面的渲染、数据的获取，对用户事件的响应所有的应用逻辑都混合在一起，这样在开发简单项目时，可能看不出什么问题，如果项目变得复杂，那么整个文件就会变得冗长、混乱，这样对项目开发和后期的项目维护是非常不利的。
+
+### MVC
+MVC通过分离Model、View和Controller的方式来组织代码结构。其中View负责页面的显示逻辑，Model负责存储页面的业务数据，以及对相应数据的操作。并且View和Model应用了观察者模式，当Model层发生改变的时候它会通知有关View层更新页面。Controller 层是 View 层和 Model 层的纽带，它主要负责用户与应用的响应操作，当用户与页面产生交互的时候，Controller 中的事件触发器就开始工作了，通过调用 Model 层，来完成对 Model 的修改，然后 Model 层再去通知 View 层更新。
+
+### MVVM
+MVVM 分为 Model、View、ViewModel：Model 代表数据模型，数据和业务逻辑都在 Model 层中定义；View 代表 UI 视图，负责数据的展示；
+ViewModel 负责监听 Model 中数据的改变并且控制视图的更新，处理用户交互操作；Model 和 View 并无直接关联，而是通过 ViewModel 来进行联系的，Model 和 ViewModel 之间有着双向数据绑定的联系。因此当 Model 中的数据改变时会触发 View 层的刷新，View 中由于用户交互操作而改变的数据也会在 Model 中同步。这种模式实现了 Model 和 View 的数据自动同步，因此开发者只需要专注于数据的维护操作即可，而不需要自己操作 DOM。
+
+### MVP
+MVP 模式与 MVC 唯一不同的在于 Presenter 和 Controller。在MVC 模式中使用观察者模式，来实现当 Model 层数据发生变化的时候，通知 View 层的更新。这样 View 层和 Model 层耦合在一起，当项目逻辑变得复杂的时候，可能会造成代码的混乱，并且可能会对代码的复用性造成一些问题。MVP 的模式通过使用 Presenter 来实现对 View 层和 Model 层的解耦。MVC 中的 Controller 只知道Model 的接口，因此它没有办法控制 View 层的更新，MVP 模式中，View 层的接口暴露给了 Presenter 因此可以在 Presenter 中将Model 的变化和 View 的变化绑定在一起，以此来实现 View 和Model 的同步更新。这样就实现了对 View 和 Model 的解耦，Presenter 还包含了其他的响应逻辑。
+
+## slot 是什么？有什么作用？原理是什么？
+slot 又名插槽，是 Vue 的内容分发机制，组件内部的模板引擎使用slot 元素作为承载分发内容的出口。插槽 slot 是子组件的一个模板标签元素，而这一个标签元素是否显示，以及怎么显示是由父组件决定的。slot 又分三类，默认插槽，具名插槽和作用域插槽。
+
+默认插槽：又名匿名插槽，当 slot 没有指定 name 属性值的时候一个默认显示插槽，一个组件内只有有一个匿名插槽。
+
+具名插槽：带有具体名字的插槽，也就是带有 name 属性的 slot，一个组件可以出现多个具名插槽。
+
+作用域插槽：默认插槽、具名插槽的一个变体，可以是匿名插槽，也可以是具名插槽，该插槽的不同点是在子组件渲染作用域插槽时，可以将子组件内部的数据传递给父组件，让父组件根据子组件的传递过来的数据决定如何渲染该插槽。
+
+实现原理：当子组件 vm 实例化时，获取到父组件传入的 slot 标签的内容，存放在 vm.$slot 中，默认插槽为 vm.$slot.default，具名插槽为 vm.$slot.xxx，xxx 为插槽名，当组件执行渲染函数时候，遇到 slot 标签，使用$slot 中的内容进行替换，此时可以为插槽传递数据，若存在数据，则可称该插槽为作用域插槽。
+
+## $nextTick 原理及作用
+Vue 的 nextTick 其本质是对 JavaScript 执行原理 EventLoop 的一种应用。
+
+nextTick 的 核 心 是 利 用 了 如 Promise 、 MutationObserver 、setImmediate、setTimeout 的原生 JavaScript 方法来模拟对应的
+微/宏任务的实现，本质是为了利用 JavaScript 的这些异步回调任务队列来实现 Vue 框架中自己的异步回调队列。
+
+nextTick 不仅是 Vue 内部的异步队列的调用方法，同时也允许开发者在实际项目中使用这个方法来满足实际应用中对 DOM 更新数据时机的后续逻辑处理。
+
+nextTick 是典型的将底层 JavaScript 执行原理应用到具体案例中的示例，引入异步更新队列机制的原因∶
+
+如果是同步更新，则多次对一个或多个属性赋值，会频繁触发 UI/DOM的渲染，可以减少一些无用渲染
+
+同时由于 VirtualDOM 的引入，每一次状态发生变化后，状态变化的信号会发送给组件，组件内部使用 VirtualDOM 进行计算得出需要更新的具体的 DOM 节点，然后对 DOM 进行更新操作，每次更新状态后的渲染过程需要更多的计算，而这种无用功也将浪费更多的性能，所以异步渲染变得更加至关重要
+
+Vue 采用了数据驱动视图的思想，但是在一些情况下，仍然需要操作DOM。有时候，可能遇到这样的情况，DOM1 的数据发生了变化，而 DOM2需要从 DOM1 中获取数据，那这时就会发现 DOM2 的视图并没有更新，这时就需要用到了 nextTick 了。
+
+由于 Vue 的 DOM 操作是异步的，所以，在上面的情况中，就要将 DOM2获取数据的操作写在$nextTick 中
+```js
+this.$nextTick(()=>{
+    //获取数据的操作
+});
+```
+
+所以，在以下情况下，会用到 nextTick：在数据变化后执行的某个操作，而这个操作需要使用随数据变化而变化的 DOM 结构的时候，这个操作就需要方法在 nextTick()的回调函数中。
+
+在 vue 生命周期中，如果在 created()钩子进行 DOM 操作，也一定要放在 nextTick()的回调函数中。
+
+因为在 created()钩子函数中，页面的 DOM 还未渲染，这时候也没办法操作 DOM，所以，此时如果想要操作 DOM，必须将操作的代码放在
+nextTick()的回调函数中。
+
+## Vue 单页应用与多页应用的区别
+SPA 单页面应用（SinglePage Web Application），指只有一个主页面的应用，一开始只需要加载一次 js、css 等相关资源。所有内容都包含在主页面，对每一个功能模块组件化。单页应用跳转，就是切换相关组件，仅仅刷新局部资源。
+
+MPA 多页面应用 （MultiPage Application），指有多个独立页面的应用，每个页面必须重复加载 js、css 等相关资源。多页应用跳转，需要整页资源刷新。
+| 对比项/模式 | SPA  | MPA |
+| --------- | ----- | ---- |
+| 结构 | 一个主页面+许多模块的组件 | 许多完整的页面 | 
+| 体验 |页面切换快，体验佳。当初次加载文件过多时，需要做相关的调优 |页面切换慢，网速慢的时候，体验尤其不好 |
+| 资源文件 | 组件公用的资源只需要加载一次 | 每个页面都要自己加载公用的资源 |
+| 适用场景 | 对体验度和流畅度有较高要求的应用，不利于SEO(可借助SSR优化SEO) | 适用于对SEO要求较高的应用 |
+| 过渡动画 | Vue提供了transition的封装组件，容易实现 | 很难实现 |
+| 内容更新 | 相关组件的切换，即局部更新 | 整体HTML的切换，费钱(重复HTTP请求) |
+| 路由模式 |可以使用hash，也可以使用history | 普通链接跳转 |
+| 数据传递 | 因为单页面，使用全局变量就好(Vuex) | cookie、localstorage等缓存方案，URL参数，调用接口保存等 |
+| 相关成本 |前期开发成本较高，后期维护较为容易 |前期开发成本低，后期维护就比较麻烦，因为一个功能需要改很多地方 |
+
+## Vue 中封装的数组方法有哪些，其如何实现页面更新
+在 Vue 中，对响应式处理利用的是 Object.defineProperty 对数据进行拦截，而这个方法并不能监听到数组内部变化，数组长度变化，数
+组的截取变化等，所以需要对这些操作进行 hack，让 Vue 能监听到其中的变化。
+
+Vue将被侦听的数据的变更方法进行了包裹，所以他们也将会触发视图更新。这些被包裹过的方法包括：
+* push()
+* pop()
+* shift()
+* unshift()
+* splice()
+* sort()
+* reverse()
+
+那 Vue 是如何实现让这些数组方法实现元素的实时更新的呢，下面是Vue 中对这些方法的封装
+```js
+const arrayProto = Array.prototype
+export const arrayMethods = Object.create(arrayProto)
+
+const methodsToPatch = [
+  'push',
+  'pop',
+  'shift',
+  'unshift',
+  'splice',
+  'sort',
+  'reverse'
+]
+
+/**
+ * Intercept mutating methods and emit events
+ */
+methodsToPatch.forEach(function (method) {
+  // cache original method
+  const original = arrayProto[method]
+  def(arrayMethods, method, function mutator (...args) {
+    const result = original.apply(this, args)
+    const ob = this.__ob__
+    let inserted
+    switch (method) {
+      case 'push':
+      case 'unshift':
+        inserted = args
+        break
+      case 'splice':
+        inserted = args.slice(2)
+        break
+    }
+    if (inserted) ob.observeArray(inserted)
+    // notify change
+    ob.dep.notify()
+    return result
+  })
+})
+```
+简单来说就是，重写了数组中的那些原生方法，首先获取到这个数组的__ob__，也就是它的 Observer 对象，如果有新的值，就调用
+observeArray 继续对新的值观察变化（也就是通过 target__proto__== arrayMethods 来改变了数组实例的型），然后手动调用 notify，
+通知渲染 watcher，执行 update。
