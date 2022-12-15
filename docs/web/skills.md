@@ -27,3 +27,4 @@
 * [拿不到大厂offer ？简历你就写错了！](https://juejin.cn/post/6844904154461110280)
 * [一份优秀的前端开发工程师简历是怎么样的？](https://juejin.cn/post/6859534933384396808)
 * [[面经] 5年前端 - 历时1个月收获7个offer](https://juejin.cn/post/7142690757722243102)
+* [阿里、力扣、政采云的 15 位专家分享前端面试与招聘视角](https://xie.infoq.cn/article/33324ebbb5eecc432b2fb90a4)

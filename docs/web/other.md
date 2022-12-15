@@ -1,6 +1,8 @@
 # 其他面经
 * [前端知识点汇总](https://www.yuque.com/baiyueguang-rfnbu/tr4d0i)
 * [前端进阶之道](https://yuchengkai.cn/)
+* [前端知识库](https://www.html5iq.com/5ff73d79f72c21052324d1f7.html)
+* [大前端面试题库](http://bigerfe.com/)
 * [前端面试题宝典](https://fe.ecool.fun/)
 * [木易杨前端进阶](https://muyiy.cn/)
 * [大厂面试题每日一题](https://q.shanyue.tech/)
