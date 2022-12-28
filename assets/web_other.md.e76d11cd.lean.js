@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as t,a}from"./app.fbfe15fc.js";const u=JSON.parse('{"title":"其他面经","description":"","frontmatter":{},"headers":[],"relativePath":"web/other.md","lastUpdated":1671070985000}'),l={name:"web/other.md"},n=a("",2),i=[n];function o(h,f,s,p,c,_){return t(),r("div",null,i)}const g=e(l,[["render",o]]);export{u as __pageData,g as default};
