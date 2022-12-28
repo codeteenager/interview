@@ -251,3 +251,255 @@ methodsToPatch.forEach(function (method) {
 简单来说就是，重写了数组中的那些原生方法，首先获取到这个数组的__ob__，也就是它的 Observer 对象，如果有新的值，就调用
 observeArray 继续对新的值观察变化（也就是通过 target__proto__== arrayMethods 来改变了数组实例的型），然后手动调用 notify，
 通知渲染 watcher，执行 update。
+
+## Vue data 中某一个属性的值发生改变后，视图会立即同步执行重新渲染吗?
+不会立即同步执行重新渲染。Vue 实现响应式并不是数据发生变化之后 DOM 立即变化，而是按一定的策略进行 DOM 的更新。Vue 在更新DOM 时是异步执行的。只要侦听到数据变化， Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据变更。如果同一个 watcher 被多次触发，只会被推入到队列中一次。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作是非常重要的。然后，在下一个的事件循环 tick 中，Vue 刷新队列并执行实际（已去重的）工作
+
+## 简述 mixin、extends 的覆盖逻辑
+1. mixin 和 extends
+
+mixin 和 extends 均是用于合并、拓展组件的，两者均通过mergeOptions 方法实现合并。mixins 接收一个混入对象的数组，其中混入对象可以像正常的实例对象一样包含实例选项，这些选项会被合并到最终的选项中。Mixin钩子按照传入顺序依次调用，并在调用组件自身的钩子之前被调用。extends 主要是为了便于扩展单文件组件，接收一个对象或构造函数。
+
+| 属性名称 | 合并策略 | 对应合并函数 |
+|------| --------|--------|
+| data |mixins/extends只会将自己有的但是组件上没有内容混合到组件上，重复定义默认使用组件上的，如果data里的值是对象，将递归内部对象继续按照该策略合并 | mergeDataOrFn,mergeData |
+|provide |同上 |mergeDataOrFn,mergeData |
+|props | mixins/extends只会将自己有的但是组件上没有内容混合到组件上 | extend |
+|methods |同上 | extend |
+|inject |同上 | extend |
+|computed |同上 | extend |
+|组件、过滤器、指令属性 |同上 | extend |
+|el |同上 | defaultStrat |
+|propsData |同上 | defaultStrat |
+|watch |合并watch监控的回调方法，执行顺序是先mixins/extends里watch定义的回调，然后是组件的回调 | starts,watch |
+|HOOKS声明周期钩子 |同一种钩子的回调函数会被合并成数组，执行顺序是先mixins/extends里定义的钩子函数，然后才是组件里定义的 | mergeHook |
+
+2. mergeOptions 的执行过程
+
+规范化选项（normalizeProps、normalizelnject、
+normalizeDirectives)对未合并的选项，进行判断
+```js
+if(!child._base){
+  if(child.extends){
+    parent = mergeOptions(parent,child.extends,vm)
+  }
+  if(child.mixins){
+    for(let i=0,l=child.mixins.length;i<l;i++){
+      parent = mergeOptions(parent,child.mixins[i],vm)
+    }
+  }
+}
+```
+## 子组件可以直接改变父组件的数据吗?
+子组件不可以直接改变父组件的数据。这样做主要是为了维护父子组件的单向数据流。每次父级组件发生更新时，子组件中所有的 prop都将会刷新为最新的值。如果这样做了，Vue 会在浏览器的控制台中发出警告。
+
+Vue 提倡单向数据流，即父级 props 的更新会流向子组件，但是反过来则不行。这是为了防止意外的改变父组件状态，使得应用的数据流变得难以理解，导致数据流混乱。如果破坏了单向数据流，当应用复杂时，debug 的成本会非常高。只能通过 $emit 派发一个自定义事件，父组件接收到后，由父组件修改。
+
+## 对 React 和 Vue 的理解，它们的异同
+相似之处：
+
+* 都将注意力集中保持在核心库，而将其他功能如路由和全局状态管理交给相关的库；
+* 都有自己的构建工具，能让你得到一个根据最佳实践设置的项目模板；
+* 都使用了 Virtual DOM（虚拟 DOM）提高重绘性能；
+* 都有 props 的概念，允许组件间的数据传递；
+* 都鼓励组件化应用，将应用分拆成一个个功能明确的模块，提高复用性。
+
+不同之处：
+* 数据流：Vue 默认支持数据双向绑定，而 React 一直提倡单向数据流
+* 虚拟 DOM：Vue2.x 开始引入"Virtual DOM"，消除了和 React 在这方面的差异，但是在具体的细节还是有各自的特点。Vue 宣称可以更快地计算出 Virtual DOM 的差异，这是由于它在渲染过程中，会跟踪每一个组件的依赖关系，不需要重新渲染整个组件树。对于 React 而言，每当应用的状态被改变时，全部子组件都会重新渲染。当然，这可以通过 PureComponent/shouldComponentUpdate 这个生命周期方法来进行控制，但 Vue 将此视为默认的优化。
+* 组件化：React 与 Vue 最大的不同是模板的编写。Vue 鼓励写近似常规 HTML 的模板。写起来很接近标准 HTML 元素，只是多了一些属性。React 推荐你所有的模板通用 JavaScript 的语法扩展——JSX 书写。具体来讲：React 中 render 函数是支持闭包特性的，所以 import 的
+组件在 render 中可以直接调用。但是在 Vue 中，由于模板中使用的数据都必须挂在 this 上进行一次中转，所以 import 一个组件完了
+之后，还需要在 components 中再声明下。
+* 监听数据变化的实现原理不同：Vue 通过 getter/setter 以及一些函数的劫持，能精确知道数据变化，不需要特别的优化就能达到很好的性能
+React 默 认 是 通 过 比 较 引 用 的 方 式 进 行 的 ， 如 果 不 优 化（PureComponent/shouldComponentUpdate）可能导致大量不必要的vDOM 的重新渲染。这是因为 Vue 使用的是可变数据，而 React 更强调数据的不可变。
+* 高阶组件：react 可以通过高阶组件（HOC）来扩展，而 Vue 需要通过 mixins 来扩展。高阶组件就是高阶函数，而 React 的组件本身就是纯粹的函数，所以高阶函数对 React 来说易如反掌。相反 Vue.js 使用 HTML 模板创建视图组件，这时模板无法有效的编译，因此 Vue 不能采用 HOC 来实现。
+* 构建工具：两者都有自己的构建工具：React ==> Create React APP，Vue ==> vue-cli
+* 跨平台：React ==> React Native，Vue ==> Weex
+
+## Vue的优点
+* 轻量级框架：只关注视图层，是一个构建数据的视图集合，大小只有几十 kb ；
+* 简单易学：国人开发，中文文档，不存在语言障碍 ，易于理解和学习；
+* 双向数据绑定：保留了 angular 的特点，在数据操作方面更为简单；
+* 组件化：保留了 react 的优点，实现了 html 的封装和重用，在构建单页面应用方面有着独特的优势；
+* 视图，数据，结构分离：使数据的更改更为简单，不需要进行逻辑代码的修改，只需要操作数据就能完成相关操作；
+* 虚拟 DOM：dom 操作是非常耗费性能的，不再使用原生的 dom 操作节点，极大解放 dom 操作，但具体操作的还是 dom 不过是换了另一种方式；
+* 运行速度更快：相比较于 react 而言，同样是操作虚拟 dom，就性能而言， vue存在很大的优势
+
+## assets 和 static 的区别
+* 相同点： assets 和 static 两个都是存放静态资源文件。项目中所需要的资源文件图片，字体图标，样式文件等都可以放在这两个文件下，这是相同点
+
+* 不相同点：assets 中存放的静态资源文件在项目打包时，也就是运行 npm run build 时会将 assets 中放置的静态资源文件进行打包上传，所谓打包简单点可以理解为压缩体积，代码格式化。而压缩后的静态资源文件最终也都会放置在 static 文件中跟着 index.html 一同上传至服务器。static 中放置的静态资源文件就不会要走打包压缩格式化等流程，而是直接进入打包好的目录，直接上传至服务器。因为避免了压缩直接进行上传，在打包时会提高一定的效率，但是static 中的资源文件由于没有进行压缩等操作，所以文件的体积也就相对于 assets 中打包后的文件提交较大点。在服务器中就会占据更大的空间。
+
+建议： 将项目中 template 需要的样式文件 js 文件等都可以放置在assets 中，走打包这一流程。减少体积。而项目中引入的第三方的资源文件如 iconfoont.css 等文件可以放置在 static 中，因为这些引入的第三方文件已经经过处理，不再需要处理，直接上传。
+
+## delete 和 Vue.delete 删除数组的区别
+delete 只是被删除的元素变成了 empty/undefined 其他的元素的键值还是不变。
+
+Vue.delete 直接删除了数组 改变了数组的键值
+
+## Vue 模版编译原理
+vue 中的模板 template 无法被浏览器解析并渲染，因为这不属于浏览器的标准，不是正确的 HTML 语法，所有需要将 template 转化成一个 JavaScript 函数，这样浏览器就可以执行这一个函数并渲染出对应的 HTML 元素，就可以让视图跑起来了，这一个转化的过程，就成为模板编译。模板编译又分三个阶段，解析 parse，优化 optimize，生成 generate，最终生成可执行函数 render。
+
+* 解析阶段：使用大量的正则表达式对 template 字符串进行解析，将标签、指令、属性等转化为抽象语法树 AST。
+* 优化阶段：遍历 AST，找到其中的一些静态节点并进行标记，方便在页面重渲染的时候进行 diff 比较时，直接跳过这一些静态节点，优化 runtime 的性能。
+* 生成阶段：将最终的 AST 转化为 render 函数字符串。
+
+## vue 初始化页面闪动问题
+使用 vue 开发时，在 vue 初始化之前，由于 div 是不归 vue 管的，所以我们写的代码在还没有解析的情况下会容易出现花屏现象，看到类
+似于`{{message}}`的字样，虽然一般情况下这个时间很短暂，但是还是有必要让解决这个问题的。
+
+首先：在 css 里加上以下代码：
+```css
+[v-cloak]{
+  display:none;
+}
+```
+如果没有彻底解决问题，则在根元素加上`style="display:none;" :style="{display: 'block'}`
+
+## MVVM 的优缺点?
+优点:
+
+分离视图（View）和模型（Model），降低代码耦合，提⾼视图或者逻辑的重⽤性: ⽐如视图（View）可以独⽴于 Model 变化和修改，⼀个 ViewModel 可以绑定不同的"View"上，当 View 变化的时候 Model不可以不变，当 Model 变化的时候 View 也可以不变。你可以把⼀些视图逻辑放在⼀个 ViewModel⾥⾯，让很多 view 重⽤这段视图逻辑提⾼可测试性: ViewModel 的存在可以帮助开发者更好地编写测试代码。
+
+⾃动更新dom: 利⽤双向绑定,数据更新后视图⾃动更新,让开发者从繁琐的⼿动 dom 中解放。
+
+缺点:
+
+Bug 很难被调试: 因为使⽤双向绑定的模式，当你看到界⾯异常了，有可能是你 View 的代码有 Bug，也可能是 Model 的代码有问题。数据绑定使得⼀个位置的 Bug 被快速传递到别的位置，要定位原始出问题的地⽅就变得不那么容易了。另外，数据绑定的声明是指令式地写在 View 的模版当中的，这些内容是没办法去打断点 debug 的⼀个⼤的模块中 model 也会很⼤，虽然使⽤⽅便了也很容易保证了数据的⼀致性，当时⻓期持有，不释放内存就造成了花费更多的内存。对于⼤型的图形应⽤程序，视图状态较多，ViewModel 的构建和维护的成本都会⽐较⾼
+
+## v-if 和 v-for 哪个优先级更高？如果同时出现，应如何优化
+v-for 优先于 v-if 被解析，如果同时出现，每次渲染都会先执行循环再判断条件，无论如何循环都不可避免，浪费了性能。
+
+要避免出现这种情况，则在外层嵌套 template，在这一层进行 v-if判断，然后在内部进行 v-for 循环。如果条件出现在循环内部，可通过计算属性提前过滤掉那些不需要显示的项。
+
+## 对 Vue 组件化的理解
+1. 组件是独立和可复用的代码组织单元。组件系统是 Vue 核心特性之一，它使开发者使用小型、独立和通常可复用的组件构建大型应用；
+2. 组件化开发能大幅提高应用开发效率、测试性、复用性等；
+3. 组件使用按分类有：页面组件、业务组件、通用组件；
+4. vue 的组件是基于配置的，我们通常编写的组件是组件配置而非组件，框架后续会生成其构造函数，它们基于 VueComponent，扩展于Vue；
+5. vue 中常见组件化技术有：属性 prop，自定义事件，插槽等，它们主要用于组件通信、扩展等；6.合理的划分组件，有助于提升应用性能；
+6. 组件应该是高内聚、低耦合的；
+7. 遵循单向数据流的原则。
+
+## 对 vue 设计原则的理解
+1. 渐进式 JavaScript 框架：与其它大型框架不同的是，Vue 被设计为可以自底向上逐层应用。Vue 的核心库只关注视图层，不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与现代化的工具链以及各种支持类库结合使用时，Vue 也完全能够为复杂的单页应用提供驱动。
+2. 易用性：vue 提供数据响应式、声明式模板语法和基于配置的组件系统等核心特性。这些使我们只需要关注应用的核心业务即可，只要会写js、html 和 css 就能轻松编写 vue 应用。
+3. 灵活性：渐进式框架的最大优点就是灵活性，如果应用足够小，我们可能仅需要 vue 核心特性即可完成功能；随着应用规模不断扩大，我们才可能逐渐引入路由、状态管理、vue-cli 等库和工具，不管是应用体积还是学习难度都是一个逐渐增加的平和曲线。
+4. 高效性：超快的虚拟 DOM 和 diff算法使我们的应用拥有最佳的性能表现。追求高效的过程还在继续，vue3 中引入 Proxy 对数据响应式改进以及编译器中对于静态内容编译的改进都会让 vue 更加高效。
+
+## 说一下 Vue 的生命周期
+Vue 实例有⼀个完整的⽣命周期，也就是从开始创建、初始化数据、编译模版、挂载 Dom -> 渲染、更新 -> 渲染、卸载 等⼀系列过程，称这是 Vue 的⽣命周期。
+
+1. beforeCreate（创建前）：数据观测和初始化事件还未开始，此时data 的响应式追踪、event/watcher 都还没有被设置，也就是说不能访问到 data、computed、watch、methods 上的方法和数据。
+2. created（创建后） ：实例创建完成，实例上配置的 options 包括 data、computed、watch、methods 等都配置完成，但是此时渲染得节点还未挂载到 DOM，所以不能访问到 $el 属性。
+3. beforeMount（挂载前）：在挂载开始之前被调用，相关的 render函数首次被调用。实例已完成以下的配置：编译模板，把 data 里面的数据和模板生成 html。此时还没有挂载 html 到页面上。
+4. mounted（挂载后）：在 el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用。实例已完成以下的配置：用上面编译好的 html 内容替换 el 属性指向的 DOM 对象。完成模板中的 html 渲染到 html 页面中。此过程中进行 ajax 交互。
+5. beforeUpdate（更新前）：响应式数据更新时调用，此时虽然响应式数据更新了，但是对应的真实 DOM 还没有被渲染。
+6. updated（更新后） ：在由于数据更改导致的虚拟 DOM 重新渲染和打补丁之后调用。此时 DOM 已经根据响应式数据的变化更新了。调用时，组件 DOM 已经更新，所以可以执行依赖于 DOM 的操作。然而在大多数情况下，应该避免在此期间更改状态，因为这可能会导致更新无限循环。该钩子在服务器端渲染期间不被调用。
+7. beforeDestroy（销毁前）：实例销毁之前调用。这一步，实例仍然完全可用，this 仍能获取到实例。
+8. destroyed（销毁后）：实例销毁后调用，调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。该钩子在服务端渲染期间不被调用。
+
+另外还有 keep-alive 独有的生命周期，分别为 activated 和deactivated。用 keep-alive 包裹的组件在切换时不会进行销毁，而是缓存到内存中并执行 deactivated 钩子函数，命中缓存渲染后会执行 activated钩子函数。
+
+## Vue 子组件和父组件执行顺序
+
+加载渲染过程：
+1. 父组件 beforeCreate
+2. 父组件 created
+3. 父组件 beforeMount
+4. 子组件 beforeCreate
+5. 子组件 created
+6. 子组件 beforeMount
+7. 子组件 mounted
+8. 父组件 mounte
+
+更新过程：
+1. 父组件 beforeUpdate
+2. 子组件 beforeUpdate
+3. 子组件 updated
+4. 父组件 updated
+
+销毁过程：
+1. 父组件 beforeDestroy
+2. 子组件 beforeDestroy
+3. 子组件 destroyed
+4. 父组件 destoryed
+
+## created 和 mounted 的区别
+created:在模板渲染成 html 前调用，即通常初始化某些属性值，然后再渲染成视图。
+
+mounted:在模板渲染成 html 后调用，通常是初始化页面完成后，再对 html 的 dom 节点进行一些需要的操作
+
+## 一般在哪个生命周期请求异步数据
+我们可以在钩子函数 created、beforeMount、mounted 中进行调用，因为在这三个钩子函数中，data 已经创建，可以将服务端端返回的数据进行赋值。
+
+推荐在 created 钩子函数中调用异步请求，因为在 created 钩子函数中调用异步请求有以下优点：
+* 能更快获取到服务端数据，减少页面加载时间，用户体验更好；
+* SSR 不支持 beforeMount 、mounted 钩子函数，放在 created 中有
+助于一致性。
+
+## keep-alive 中的生命周期哪些
+keep-alive 是 Vue 提供的一个内置组件，用来对组件进行缓存——在组件切换过程中将状态保留在内存中，防止重复渲染 DOM。
+
+如果为一个组件包裹了 keep-alive，那么它会多出两个生命周期：deactivated、activated。同时，beforeDestroy 和 destroyed 就不会再被触发了，因为组件不会被真正销毁。
+
+当组件被换掉时，会被缓存到内存中、触发 deactivated 生命周期；当组件被切回来时，再去缓存里找这个组件、触发 activated 钩子函数。
+
+## 路由的 hash 和 history 模式的区别
+
+Vue-Router 有两种模式：hash 模式和 history 模式。默认的路由模式是 hash 模式。
+
+1. hash 模式
+
+简介： hash 模式是开发中默认的模式，它的 URL 带着一个#，例如：`http://www.abc.com/#/vue`，它的 hash 值就是#/vue。特点：hash 值会出现在 URL 里面，但是不会出现在 HTTP 请求中，对后端完全没有影响。所以改变 hash 值，不会重新加载页面。这种模式的浏览器支持度很好，低版本的 IE 浏览器也支持这种模式。hash路由被称为是前端路由，已经成为 SPA（单页面应用）的标配。
+
+原理： hash 模式的主要原理就是 onhashchange()事件
+```js
+window.onhashchange = function(event){
+  console.log(event.oldURL,event.newURL);
+  let hash = location.hash.slice(1);
+}
+```
+使用 onhashchange()事件的好处就是，在页面的 hash 值发生变化时，无需向后端发起请求，window 就可以监听事件的改变，并按规则加载相应的代码。除此之外，hash 值变化对应的 URL 都会被浏览器记录下来，这样浏览器就能实现页面的前进和后退。虽然是没有请求后端服务器，但是页面的 hash 值和对应的 URL 关联起来了。
+
+2. history 模式
+
+简介： history 模式的 URL 中没有#，它使用的是传统的路由分发模式，即用户在输入一个 URL 时，服务器会接收这个请求，并解析这个URL，然后做出相应的逻辑处理。
+
+特 点 ： 当 使 用 history 模 式 时 ， URL 就 像 这 样 ：`http://abc.com/user/id`。相比 hash 模式更加好看。但是，history模式需要后台配置支持。如果后台没有正确配置，访问时会返回 404。
+
+API： history api 可以分为两大部分，切换历史状态和修改历史状态：
+
+* 修 改 历 史 状 态 ： 包 括 了 HTML5 History Interface 中 新 增 的pushState() 和 replaceState() 方法，这两个方法应用于浏览器的历史记录栈，提供了对历史记录进行修改的功能。只是当他们进行修改时，虽然修改了 url，但浏览器不会立即向后端发送请求。如果要做到改变 url 但又不刷新页面的效果，就需要前端用上这两个 API。
+* 切换历史状态： 包括 forward()、back()、go()三个方法，对应浏览器的前进，后退，跳转操作。
+
+虽然 history 模式丢弃了丑陋的#。但是，它也有自己的缺点，就是在刷新页面的时候，如果没有相应的路由或资源，就会刷出 404 来。如果想要切换到 history 模式，就要进行以下配置（后端也要进行配置）
+```js
+const router = new VueRouter({
+  mode: 'history',
+  routes:[...]
+});
+```
+
+3. 两种模式对比
+  
+调用 history.pushState() 相比于直接修改 hash，存在以下优势:
+* pushState() 设置的新 URL 可以是与当前 URL 同源的任意 URL；而hash 只可修改 # 后面的部分，因此只能设置与当前 URL 同文档的URL；
+* pushState() 设置的新 URL 可以与当前 URL 一模一样，这样也会把记录添加到栈中；而 hash 设置的新值必须与原来不一样才会触发动作将记录添加到栈中；
+* pushState() 通过 stateObject 参数可以添加任意类型的数据到记录中；而 hash 只可添加短字符串；
+* pushState() 可额外设置 title 属性供后续使用。
+
+hash 模式下，仅 hash 符号之前的 url 会被包含在请求中，后端如果没有做到对路由的全覆盖，也不会返回 404 错误；history 模式下，前端的 url 必须和实际向后端发起请求的 url 一致，如果没有对用的路由处理，将返回 404 错误。hash 模式和 history 模式都有各自的优势和缺陷，还是要根据实际情况选择性的使用。
+
+## Vue-router 跳转和 location.href 有什么区别
+使用 location.href= /url 来跳转，简单方便，但是刷新了页面；使用 history.pushState( /url ) ，无刷新页面，静态跳转；
+
+引进 router ，然后使用 router.push( /url ) 来跳转，使用了 diff算法，实现了按需加载，减少了 dom 的消耗。其实使用 router 跳转和使用 history.pushState() 没什么差别的，因为 vue-router 就是用了 history.pushState() ，尤其是在 history 模式下。
+
+## Vuex 的原理
+Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。每一个Vuex 应用的核心就是 store（仓库）。“store” 基本上就是一个容器，它包含着你的应用中大部分的状态 ( state )。
+
+Vuex 的状态存储是响应式的。当 Vue 组件从 store 中读取状态的时候，若 store 中的状态发生变化，那么相应的组件也会相应地得到高效更新。
+
+改 变 store 中 的 状 态 的 唯 一 途 径 就 是 显 式 地 提 交 (commit)mutation。这样可以方便地跟踪每一个状态的变化。
+
