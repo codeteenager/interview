@@ -66,6 +66,10 @@ module.exports = {
                             link: "/web/project",
                         },
                         {
+                            text: "前端职业规划",
+                            link: "/web/career-planning",
+                        },
+                        {
                             text: "HR面试问题",
                             link: "/web/hr",
                         },
