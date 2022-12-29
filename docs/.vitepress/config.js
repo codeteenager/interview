@@ -54,6 +54,22 @@ module.exports = {
                             link: "/web/vue",
                         },
                         {
+                            text: "React面试题",
+                            link: "/web/react",
+                        },
+                        {
+                            text: "性能优化面试题",
+                            link: "/web/performance",
+                        },
+                        {
+                            text: "前端工程化面试题",
+                            link: "/web/project",
+                        },
+                        {
+                            text: "HR面试问题",
+                            link: "/web/hr",
+                        },
+                        {
                             text: "面试套路",
                             link: "/web/skills",
                         },
