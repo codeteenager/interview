@@ -80,7 +80,7 @@ Vue.js采用数据劫持结合发布者-订阅者模式的方式，通过Object.
 
 第四步：MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的Model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile间的通信“桥梁”，达到“数据变化→视图更新、视图交互变化→Model数据变更”的双向绑定效果。
 
-![](/vue/2.png)
+![](/images/9.png)
 
 ## `<transition>`和`<transition-group>`有什么区别?
 唯一的区别就是`<transition>`中只能包裹一个元素，而`<transition-group>`可以包裹多个元素。
@@ -121,7 +121,7 @@ $route是“路由信息”对象，包括path、params、hash、query、fullPat
 ## Vue的基本原理
 当一个Vue实例创建时，Vue会遍历data中的属性，用Object.defineProperty(vue3.0 使用 proxy)将它们转为getter/setter，并且在内部追踪相关依赖，在属性被访问和修改时通知变化。 每个组件实例都有相应的 watcher 程序实例，它会在组件渲染的过程中把属性记录为依赖，之后当依赖项的 setter 被调用时，会通知 watcher 重新计算，从而致使它关联的组件得以更新。
 
-![](/vue/1.png)
+![](/images/8.png)
 
 ## MVVM、MVC、MVP的区别
 MVC、MVP和MVVM是三种常见的软件架构设计模式，主要通过分离关注点的方式来组织代码结构，优化开发效率。

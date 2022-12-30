@@ -53,7 +53,7 @@ loader 。 所以 Loader 的作⽤是让 webpack 拥有了加载和解析⾮Java
 
 ## webpack 热更新的实现原理
 webpack 的热更新⼜称热替换（Hot Module Replacement），缩写为HMR。这个机制可以做到不⽤刷新浏览器⽽将新变更的模块替换掉旧的模块。
-![](/project/1.png)
+![](/images/6.png)
 
 ⾸先要知道 server 端和 client 端都做了处理⼯作：
 
@@ -76,7 +76,7 @@ babel 的转译过程也分为三个阶段，这三步具体是：
 * 解析 Parse: 将代码解析⽣成抽象语法树（AST），即词法分析与语法分析的过程；
 * 转换 Transform: 对于 AST 进⾏变换⼀系列的操作，babel 接受得到 AST 并通过 babel-traverse 对其进⾏遍历，在此过程中进⾏添加、更新及移除等操作
 * ⽣成 Generate: 将变换后的 AST 再转换为 JS 代码, 使⽤到的模块是 babel-generator。
-![](/project/2.png)
+![](/images/7.png)
 
 ## git 和 svn 的区别
 * git 和 svn 最大的区别在于 git 是分布式的，而 svn 是集中式的。因此我们不能再离线的情况下使用 svn。如果服务器出现问题，就没有办法使用 svn 来提交代码。
