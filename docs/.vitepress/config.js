@@ -42,11 +42,19 @@ module.exports = {
                             link: "/web/program",
                         },
                         {
-                            text: "JavaScript",
+                            text: "HTML面试题",
+                            link: "/web/html",
+                        },
+                        {
+                            text: "CSS面试题",
+                            link: "/web/css",
+                        },
+                        {
+                            text: "JavaScript面试题",
                             link: "/web/javascript",
                         },
                         {
-                            text: "网络",
+                            text: "计算机网络",
                             link: "/web/network",
                         },
                         {
@@ -64,6 +72,10 @@ module.exports = {
                         {
                             text: "前端工程化面试题",
                             link: "/web/project",
+                        },
+                        {
+                            text: "浏览器面试题",
+                            link: "/web/browser",
                         },
                         {
                             text: "前端职业规划",
