@@ -34,6 +34,10 @@ module.exports = {
                             link: "/web/introduction",
                         },
                         {
+                            text: "前端职业规划",
+                            link: "/web/career-planning",
+                        },
+                        {
                             text: "数据结构与算法",
                             link: "/web/algorithm",
                         },
@@ -76,10 +80,6 @@ module.exports = {
                         {
                             text: "浏览器面试题",
                             link: "/web/browser",
-                        },
-                        {
-                            text: "前端职业规划",
-                            link: "/web/career-planning",
                         },
                         {
                             text: "HR面试问题",
