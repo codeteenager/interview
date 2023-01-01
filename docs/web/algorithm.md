@@ -13,6 +13,83 @@
 
 数量级用O()来表示，比如：O(1)一次就够(数量级)，O(n)和传输的数据量一样(数量级)，O(n^2)数据量的平方(数量级)，O(logn)数据量的对数(数量级)，O(n*logn)数据量*数据量的对数(数量级)，其中logn可以理解为一个二分的循环算法。
 
+## 为什么要学习数据结构与算法
+当我们通过框架或工具来开发的时候，其实我们对框架或工具的影响度较低，就算我们可以通过配置进行内部的处理，但是核心还是由库和框架决定的。那么我们希望优化我们的程序，那么从哪方面入手呢？这时候我们可以利用数据处理操作优化功能，这里就需要使用数据结构和算法的相关内容。
+
+那么我们常说数据结构+算法=程序，数据结构我们在开发中比较常用，例如数组，算法常用的像排序算法。利用特定的数据结构和算法对我们的程序书写的复杂度会有一个简化，让代码化繁为简，其次也能提升代码程序的性能，另外也能提升面试通过率。
+
+## 栈
+栈是一种遵从后进先出原则的有序集合，添加新元素的一端称为栈顶，另一端称为栈底。操作栈的元素时，只能从栈顶操作(添加、移除或取值)。
+
+栈需要实现以下功能：
+* push()入栈方法
+* pop()出栈方法
+* top()获取栈顶值
+* size()获取栈的元素个数
+* clear()清空栈
+
+```js
+class Stach{
+    constructor(){
+        //存储栈的数据
+        this.data = [];
+        //记录栈的数据个数(相当于数组的Length)
+        this.count = 0;
+    }
+
+    //push()入栈方法
+    push(item){
+        //方式1：数组方法push添加
+        //this.data.push(item)
+        //方式2：利用数组长度
+        //this.data[this.data.length] = item
+        //方式3：计数方式
+        this.data[this.count] = item;
+        //入栈后，count自增
+        this.count++;
+    }
+
+    //pop()出栈方法
+    pop(){
+        //出栈的前提是栈中存在元素，应先行检测
+        if(this.isEmpty()){
+            console.log('栈为空!');
+            return;
+        }
+        //移除栈顶数据
+        //方式1：数组方法pop移除
+        //return this.data.pop();
+        //方式2：计数方式
+        const temp = this.data[this.count -1];
+        delete this.data[--this.count];
+        return temp;
+    }
+    //检测栈是否为空
+    isEmpty(){
+        return this.count === 0;
+    }
+    //top()用来获取栈顶值
+    top(){
+        if(this.isEmpty()){
+            console.log('栈为空');
+            return
+        }
+        return this.data[this.count - 1];
+    }
+    //size()获取元素个数
+    size(){
+        return this.count;
+    }
+    //clear()清空栈
+    clear(){
+        this.data = [];
+        this.count = 0;
+    }
+}
+```
+### LeetCode精选题目
+包含min函数的栈
+
 ## 排序算法复杂度
 |  排序算法 | 平均时间复杂度 | 最好情况 | 最坏情况 |空闲复杂度 | 排序方式 | 稳定性  |
 | -------  | ---------- | --------  |-------- | --------- | ------- | -------- |
@@ -26,3 +103,4 @@
 | 计数排序  | O(n + K) | O(n + K) | O(n + K)| O(k) | Out-place | 稳定 |
 | 桶排序  | O(n + k) | O(n + K)|O(n^2) | O(n + K) | Out-place | 稳定 |
 | 基数排序  | O(n x k) | O(n x k) | O(n x k) |O(n + K)| Out-place | 稳定 |
+
