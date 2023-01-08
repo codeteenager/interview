@@ -1,7 +1,7 @@
 ---
 layout: home
  
-title: 前端面试题
+title: 前端面试宝典
 titleTemplate: 前端面试题宝典
  
 hero:

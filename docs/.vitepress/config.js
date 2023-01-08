@@ -1,6 +1,6 @@
 module.exports = {
-    title: '前端面试八股文',
-    description: '前端面试八股文',
+    title: '前端面试宝典',
+    description: '前端面试宝典',
     base: '/interview/',
     markdown: {
         lineNumbers: true, //显示代码行数
@@ -12,7 +12,7 @@ module.exports = {
     themeConfig: {
         nav: [
             {
-                text: '前端面试题',
+                text: '正文',
                 link: "/web/algorithm"
             }
         ],
@@ -80,6 +80,14 @@ module.exports = {
                         {
                             text: "浏览器面试题",
                             link: "/web/browser",
+                        },
+                        {
+                            text: "实际工作经验",
+                            link: "/web/experience",
+                        },
+                        {
+                            text: "项目设计",
+                            link: "/web/project-design",
                         },
                         {
                             text: "HR面试问题",
