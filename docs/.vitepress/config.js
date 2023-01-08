@@ -28,6 +28,8 @@ module.exports = {
 
                 {
                     text: "基础",
+                    collapsible: true,
+                    collapsed: false,
                     items: [
                         {
                             text: "介绍",
@@ -41,6 +43,21 @@ module.exports = {
                             text: "数据结构与算法",
                             link: "/web/algorithm",
                         },
+                        {
+                            text: "实际工作经验",
+                            link: "/web/experience",
+                        },
+                        {
+                            text: "项目设计",
+                            link: "/web/project-design",
+                        },
+                    ],
+                },
+                {
+                    text: "面试题",
+                    collapsible: true,
+                    collapsed: false,
+                    items: [
                         {
                             text: "手写题",
                             link: "/web/program",
@@ -80,14 +97,6 @@ module.exports = {
                         {
                             text: "浏览器面试题",
                             link: "/web/browser",
-                        },
-                        {
-                            text: "实际工作经验",
-                            link: "/web/experience",
-                        },
-                        {
-                            text: "项目设计",
-                            link: "/web/project-design",
                         },
                         {
                             text: "HR面试问题",
