@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as t,a}from"./app.ba86566e.js";const b=JSON.parse('{"title":"面试套路","description":"","frontmatter":{},"headers":[],"relativePath":"web/skills.md","lastUpdated":1671070985000}'),n={name:"web/skills.md"},l=a("",2),i=[l];function s(o,f,h,p,j,_){return t(),r("div",null,i)}const u=e(n,[["render",s]]);export{b as __pageData,u as default};
