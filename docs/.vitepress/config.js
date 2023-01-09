@@ -12,7 +12,7 @@ module.exports = {
     themeConfig: {
         nav: [
             {
-                text: '正文',
+                text: '面试',
                 link: "/web/algorithm"
             }
         ],
@@ -44,12 +44,20 @@ module.exports = {
                             link: "/web/algorithm",
                         },
                         {
+                            text: "分析和解决问题",
+                            link: "/web/resolve",
+                        },
+                        {
                             text: "实际工作经验",
                             link: "/web/experience",
                         },
                         {
                             text: "项目设计",
                             link: "/web/project-design",
+                        },
+                        {
+                            text: "软技能",
+                            link: "/web/soft-skill",
                         },
                     ],
                 },
