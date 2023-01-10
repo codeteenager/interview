@@ -44,6 +44,10 @@ module.exports = {
                             link: "/web/algorithm",
                         },
                         {
+                            text: "前端基础知识",
+                            link: "/web/knowledge",
+                        },
+                        {
                             text: "分析和解决问题",
                             link: "/web/resolve",
                         },
