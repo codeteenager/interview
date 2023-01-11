@@ -1,6 +1,13 @@
 # 前端基础知识
 HTMLCSS JS HTTP 等基础知识是前端面试的第一步，基础知识不过关将直接被拒。扎实的前端基础知识，是作为前端工程师的根本。基础知识能保证最基本的使用，即招聘进来能干活，能产出。
 
+完善的知识范围，包含了前端工程师常用的所有知识点合理的结构化，便于理解和记忆，主要模块有：
+* 计算机基础，如算法、数据结构、设计模式等
+* 前端基础知识，如 HTML JS 语法和 API 等
+* 网络，如 HTTP 协议
+* 开发流程，如打包构建、CI/CD 前端框架，常见的 Vue React 及其周边工具
+* 运行和监控，如安全、性能优化
+
 考察的重点：
 * HTML CSS JS 基础知识
 * HTTP Ajax基础知识
@@ -172,3 +179,131 @@ btn1.addEventListener('click',()=>{
 }
 ```
 Vue组件本质上是一个JS对象，React组件(非Hooks)它本质上是一个ES6 class，它是可以的。
+
+## 请描述TCP三次握手和四次挥手
+这是非常常考的题目，这个题目不需要看过多的细节，很细的话涉及非常多的网络底层知识，这个对我们的开发没有什么价值，太底层了。我们应该关注为什么会有三次握手和四次挥手，握手是什么，挥手是什么，讲清楚过程和原因就行。
+
+握手是TCP连接的过程，它需要三次。挥手是TCP断开，它需要四次。
+
+建立TCP连接，首先我们需要先建立连接，确保双方都有收发消息的能力，然后才能传输内容(比如发送一个get请求)，网络连接是TCP协议，传输内容是HTTP协议。
+
+三次握手，建立连接过程
+1. Client发包，Server接收。Server知道了有Client要找我
+2. Server发包，Client接收。Client知道了Server已经收到信息了
+3. Client发包，Server接收。Server知道了Client要准备发送了
+
+四次挥手，关闭连接
+1. Client发包，Server接收。Server知道了Client已经请求结束
+2. Server发包，Client接收。Client知道了Server已经收到，等待关闭
+3. Server发包，Client接收。Client知道了Server此时可以关闭连接了
+4. Client发包，Server接收。Server知道了可以关闭了，然后就关闭连接
+
+## for...in和for...of有什么区别
+首先是key和value的区别，for...in遍历得到key，for...of遍历得到value。
+
+其次是适用于不同的数据类型
+* 遍历对象：for...in可以，for...of不可以
+* 遍历Map Set：for...of可以，for...in不可以
+* 遍历generator：for...of可以，for...in不可以
+
+为什么会有这种区别呢，for...in用于可枚举数据，如对象、数组、字符串，得到key。for...of用于可迭代数据，如数组、字符串、Map、Set，得到value。
+
+## for await...of有什么作用？
+for await...of用于遍历多个Promise
+```js
+const p1 = createPromise(100)
+const p2 = createPromise(200)
+const p3 = createPromise(300)
+
+const list = [p1,p2,p3]
+
+for await(let res of list){
+    console.log(rest)
+}
+```
+
+## offsetHeight、scrollHeight、clientHeight的区别
+* offsetHeight、offsetWidth尺寸计算规则为border + padding + content
+* clientHeight、clientWidth尺寸计算规则为padding + content
+* scrollHeight、scrollWidth尺寸计算规则为padding + 实际内容尺寸
+
+## HTMLCollection和NodeList区别
+我们首先要知道Node和Element的区别，DOM是一棵树，所有节点都是Node。Node可以作为所有节点的基类，Node是Element的基类，Element是其他HTML元素的基类，如HTMLDivElement。
+
+HTMLCollection是Element的集合，NodeList是Node集合。
+
+## Vue computed和watch区别
+这两个完全不是一回事，场景不一样，用途也不一样。
+
+computed用于计算产生新的数据，有缓存。watch用于监听现有数据
+
+## JS严格模式有什么特点
+JS严格模式细节要求很多，只掌握重点即可。
+
+严格模式开启有两种方式，一种是全局开启，另一种是某个函数开启。
+```js
+'use strict' //全局开启
+
+function fn(){
+    'use strict'  //某个函数开启
+}
+```
+
+它的特点如下：
+
+1. 全局变量必须先声明
+```js
+'use strict'
+n = 10 //ReferenceError: n is not defined
+```
+2. 禁止使用with
+```js
+'use strict'
+var obj = {x:10}
+with(obj){
+    //Uncaught SyntaxError: Strict mode code may not include a with sttement
+    console.log(x)
+}
+```
+3. 创建eval作用域
+```js
+'use strict'
+var x = 10
+eval('var x = 20;console.log(x)') //很不推荐使用
+console.log(x)
+```
+4. 禁止this指向window
+```js
+'use strict'
+function fn(){
+    console.log('this',this) //undefined
+}
+fn()
+```
+5. 函数参数不能重名
+```js
+'use strict'
+
+//Uncaught SyntaxError: Duplicate parameter name not allowed in this context
+function fn(x,x,y){
+    return
+}
+```
+## Vue组件通讯有几种方式，尽量全面
+1. props和$emit
+2. 自定义事件
+3. $attr
+4. $parent
+5. $refs
+6. provide/inject
+7. Vuex
+
+这几种方式有各自不同的场景：
+* 父子组件
+* 上下级组件(跨多级)通讯
+* 全局组件
+
+## HTTP跨域请求时为何发送options请求
+首先跨域请求时因为浏览器的同源策略，一般限制Ajax网络请求，不能跨域请求server，不会限制`<link>`、`<img>`、`<script>`、`<iframe>`加载第三方资源。
+
+options请求时跨域请求之前的预检查，它要检查服务端是否满足当前请求的能力，例如是否支持put请求，它是浏览器自行发起的，无需我们干预，不会影响实际的功能。

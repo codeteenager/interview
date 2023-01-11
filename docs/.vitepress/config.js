@@ -48,6 +48,10 @@ module.exports = {
                             link: "/web/knowledge",
                         },
                         {
+                            text: "知识深度",
+                            link: "/web/depth",
+                        },
+                        {
                             text: "分析和解决问题",
                             link: "/web/resolve",
                         },
