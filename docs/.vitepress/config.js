@@ -95,6 +95,10 @@ module.exports = {
                             link: "/web/javascript",
                         },
                         {
+                            text: "TypeScript面试题",
+                            link: "/web/typescript",
+                        },
+                        {
                             text: "计算机网络",
                             link: "/web/network",
                         },
