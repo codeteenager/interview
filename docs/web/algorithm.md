@@ -95,6 +95,93 @@ class Stach{
     }
 }
 ```
+
+## 队列
+队列是一种遵循先进先出原则的有序集合，添加新元素的一端称为队尾，另一端称为队首。
+
+队列需要实现以下功能：
+* enqueue()入队方法
+* dequeue()出队方法
+* top()获取队首值
+* size()获取队列元素个数
+* clear()清空队列
+
+基于数组实现队列
+```js
+class Queue{
+    constructor(){
+        //用于存储队列数据
+        this.queue = [];
+        this.count = 0;
+    }
+    //入队方法
+    enqueue(item){
+        this.queue[this.count++] = item;
+    }
+    //出队方法
+    dequeue(){
+        if(this.isEmpty()){
+            return;
+        }
+        //删除queue的第一个元素
+        //delete this.queue[0]
+        //利用shift移除数组第一个元素
+        this.count--;
+        return this.queue.shift();
+    }
+    isEmpty(){
+        return this.count === 0;
+    }
+    //获取队首元素值
+    top(){
+        if(this.isEmpty()){
+            return;
+        }
+        return this.queue[0];
+    }
+    size(){
+        return this.count;
+    }
+    clear(){
+        this.queue = [];
+    }
+}
+```
+基于对象实现队列
+```js
+class queue{
+    constructor(){
+        this.queue = {};
+        this.count = 0;
+        //用于记录队首的键
+        this.head = 0;
+    }
+    //入队方法
+    enqueue(){
+        this.queue[this.count++] = item;
+    }
+    //出队方法
+    dequeue(){
+        if(this.isEmpty()){
+            return;
+        }
+        const headData = this.queue[this.head];
+        delete this.queue[this.head];
+        this.head++;
+        this.count--;
+        return headData;
+    }
+    isEmpty(){
+        return this.count === 0;
+    }
+    clear(){
+        this.queue = {};
+        this.count = 0;
+        this.head = 0;
+    }
+}
+```
+
 ### LeetCode精选题目
 包含min函数的栈
 
