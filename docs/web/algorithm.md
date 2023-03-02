@@ -13,6 +13,14 @@
 
 数量级用O()来表示，比如：O(1)一次就够(数量级)，O(n)和传输的数据量一样(数量级)，O(n^2)数据量的平方(数量级)，O(logn)数据量的对数(数量级)，O(n*logn)数据量*数据量的对数(数量级)，其中logn可以理解为一个二分的循环算法。
 
+### 空间复杂度
+空间复杂度指的是程序运行所需要的内存空间，在前端领域是重时间轻空间，因为运行在浏览器中基本上比较强大足够用。
+
+* O(1)有限的、可数的空间(数量级)
+* O(n)和输入的数据量相同的空间(数量级)
+
+程序员必须掌握算法复杂度，如果你没有复杂度的概念和敏感度，写程序时非常危险的。例如，代码功能测试正常，但数量大了，程序就崩溃。对于前端而言，尤其是时间复杂度。
+
 ## 为什么要学习数据结构与算法
 当我们通过框架或工具来开发的时候，其实我们对框架或工具的影响度较低，就算我们可以通过配置进行内部的处理，但是核心还是由库和框架决定的。那么我们希望优化我们的程序，那么从哪方面入手呢？这时候我们可以利用数据处理操作优化功能，这里就需要使用数据结构和算法的相关内容。
 
@@ -104,3 +112,170 @@ class Stach{
 | 桶排序  | O(n + k) | O(n + K)|O(n^2) | O(n + K) | Out-place | 稳定 |
 | 基数排序  | O(n x k) | O(n x k) | O(n x k) |O(n + K)| Out-place | 稳定 |
 
+## 判断字符串是否括号匹配
+一个字符串s可能包含{}()[]三种括号，判断s是否是括号匹配的，如(a{b}c)匹配，而{a(b或{a(b}c)就不匹配。
+
+这个题考察的就是栈，它是非常基础的数据结构，它是先进后出的数据结构。很多人会问栈和数组有什么区别？栈是逻辑结构，理论模型，不管如何实现，不受任何语言的限制。数据是物理结构，真实的功能实现，受限于编程语言。数组可以实现栈。
+
+这道题的思路就是遇到左括号`{([`就压栈，遇到有括号`})]`就判断栈顶，匹配则出栈。最后判断length是否等于0。
+
+```ts
+/**
+ * 判断左右括号是否匹配
+ */
+function isMatch(left:string,right:string){
+    if(left==='{' && right === '}') return true
+    if(left==='[' && right === ']') return true
+    if(left==='(' && right === ')') return true
+
+    return false
+}
+/**
+ * 判断括号是否匹配
+ */
+function matchBracket(str:string): boolean{
+    const length = str.length
+    if(length === 0) return true
+    const stack = []
+    const leftSymbols = '{[('
+    const rightSymbols = '}])'
+    for(let i=0;i<length;i++){
+        const s = str[i]
+        if(leftSymbols.includes(s)){
+            //左括号，压栈
+            stack.push(s)
+        }else if(rightSymbols.includes(s)){
+            //有括号，判断栈顶(是否出栈)
+            const top = stack[stack.length - 1]
+            if(isMatch(top,s)){
+                stack.pop()
+            }else{
+                return false
+            }
+        }
+    }
+    return stack.length === 0
+}
+```
+
+## 给一个数组，找出其中和为n的两个元素
+有一个递增的数组[1,2,4,7,11,15]和一个n=15，数组中有两个数，和是n。即4+11===15。写出一个函数，找出这两个数。
+
+常规思路是嵌套循环，找到一个数，然后去遍历下一个数，求和，判断。但是时间复杂度是o(n^2)，不可用。
+
+```ts
+function findTowNumbers1(arr:number[],n:number): number[]{
+    const res: number[] = []
+    const length = arr.length
+    if(length === 0) return res
+    for(let i=0;i<length-1;i++){
+        const n1 = arr[i]
+        let flag = false // 是否得到了结果
+        for(let j =i+1;j<length;j++){
+            const n2 = arr[j]
+            if(n1+n2===n){
+                res.push(n1)
+                res.push(n2)
+                flag = true
+                break
+            }
+        }
+        if(flag) break
+    }
+    return res
+}
+```
+
+如何优化呢？我们可以利用递增(有序)的特性，随便找两个数，如果和大于n，则需要向前寻找，如果和小于n，则需要向后寻找--二分法。
+
+使用双指针，时间复杂度降低到O(n)，定义i指向头，j指向尾，求arr[i]+arr[j]
+
+如果大于n，则j需要向前移动，如果小于n，则i需要向后移动
+```ts
+function findTowNumbers1(arr:number[],n:number): number[]{
+    const res: number[] = []
+    const length = arr.length
+    if(length === 0) return res
+    let i = 0 //头
+    let j = length -1 //尾
+    while(i<j){
+        const n1 = arr[i]
+        const n2 = arr[j]
+        const sum = n1 + n2
+        if(sum>n){
+            //sum大于n，则j要向前移动
+            j--
+        }else if(sum<n){
+            //sum小于n,则i要向后移动
+            i++
+        }else{
+            //相等
+            res.push(n1)
+            res.push(n2)
+            break
+        }
+    }
+    return res
+}
+```
+
+## 用JS实现二分查找，并说明时间复杂度
+
+思路是有两种，一种是递归，代码逻辑更加清晰，二分之一的查找。非递归，性能更好，时间复杂度是O(logn)非常快。
+
+循环查找
+```ts
+function binarySearch1(arr:number[],target:number): number{
+    const length = arr.length
+    if(length === 0) return -1
+    let startIndex = 0 //开始位置
+    let endIndex = length - 1 //结束位置
+    while(startIndex<=endIndex){
+        const midIndex = Math.floor((startIndex + endIndex)/2)
+        const midValue = arr[midIndex]
+        if(target < midValue){
+            //目标值较小，则继续在左侧查找
+            endIndex = midIndex - 1
+        }else if(target > midValue){
+            //目标值较大，则继续在右侧查找
+            startIndex = midIndex + 1
+        }else{
+            //相等，返回
+            return midIndex
+        }
+    }
+
+    return -1
+}
+```
+递归查找
+```ts
+function binarySearch2(arr:number[],target:number,startIndex?:number,endIndex?:number): number[]{
+    const length = arr.length
+    if(length === 0) return -1
+
+    //开始和结束的范围
+    if(startIndex == null) startIndex = 0
+    if(endIndex == null) endIndex = length - 1
+
+    //如果start和end相遇，则结束
+    if(startIndex > endIndex) return -1
+    //中间位置
+    const midIndex = Math.floor((startIndex + endIndex)/2)
+    const midValue = arr[midIndex]
+
+    if(target<midValue){
+        //目标值较小，则继续在左侧查找
+        return binarySearch2(arr,target,startIndex,midIndex - 1)
+    }else if(target>midValue){
+        //目标值较大，则继续在右侧查找
+        return binarySearch2(arr,target,midIndex + 1 , endIndex)
+    }else{
+        //相等返回
+        return midIndex
+    }
+}
+```
+循环和递归哪个更快呢？循环较快一些，循环就是一个函数，不停地去while循环，但是递归要频繁的调用多次函数，每次调用函数都有开销，因此循环会较快一些。
+
+记住凡有序，必二分。凡二分，时间复杂度必包含O(logn)。
