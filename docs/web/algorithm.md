@@ -13,6 +13,14 @@
 
 数量级用O()来表示，比如：O(1)一次就够(数量级)，O(n)和传输的数据量一样(数量级)，O(n^2)数据量的平方(数量级)，O(logn)数据量的对数(数量级)，O(n*logn)数据量*数据量的对数(数量级)，其中logn可以理解为一个二分的循环算法。
 
+### 时间复杂度
+![](/images/46.png)
+* O(1)：代码就是平铺直叙的执行，没有任何循环。
+* O(logn)：有循环，但其中使用了二分法，例如：二分查找算法，二分法是非常重要的算法思维，它可以极大的减少复杂度，而且计算量越大、减少的越明显。可以看看本文上面的图。
+* O(n)：普通的循环。
+* O(n*logn)：嵌套循环，一层是普通循环，一层有二分算法。例如：快速排序算法。
+* O(n^2)：两个普通循环的嵌套，例如常见的冒泡排序。
+
 ### 空间复杂度
 空间复杂度指的是程序运行所需要的内存空间，在前端领域是重时间轻空间，因为运行在浏览器中基本上比较强大足够用。
 
@@ -366,3 +374,113 @@ function binarySearch2(arr:number[],target:number,startIndex?:number,endIndex?:n
 循环和递归哪个更快呢？循环较快一些，循环就是一个函数，不停地去while循环，但是递归要频繁的调用多次函数，每次调用函数都有开销，因此循环会较快一些。
 
 记住凡有序，必二分。凡二分，时间复杂度必包含O(logn)。
+
+## 数字千分位格式化
+将数字千分位格式化，输出字符串。如输入数字12050100，输出字符串`12,050,100`
+
+常规思路是转换为数组，reverse，每3位拆分。或者使用正则表达式，又或者使用字符串拆分。
+
+使用数组的方式
+```ts
+function format(n:number):string{
+    n = Math.floor(n) //只考虑整数的情况
+
+    const s = n.toString()
+    const arr = s.split('').reverse()
+    return arr.reduce((prev,val,index)=>{
+        if(index%3===0){
+            if(prev){
+                return val + ',' + prev
+            }else{
+                return val
+            }
+        }else{
+            return val+prev
+        }
+    },'')
+}
+```
+使用字符串分析的方式
+```ts
+function format(n:number):string{
+    n = Math.floor(n) //只考虑整数的情况
+
+    let res = ''
+    const s = n.toString()
+    const length = s.length
+    for(let i = length - 1;i>=0;i--){
+        const j = length - i
+        if(j % 3 ===0){
+            if(i===0){
+                res = s[i]+res
+            }else{
+                res = ','+s[i]+res
+            }
+        }else{
+            res = s[i] + res
+        }
+    }
+    return res
+}
+```
+
+## 用JS切换字母大小写
+输入一个字符串，切换其中字母的大小写，如输入字符串12aBc34，输出字符串12AbC34。
+
+常见思路有两个一个是正则表达式，另一个是ASCII码判断。
+
+正则表达式方式
+```ts
+function switchLetterCase(s:string): string{
+    const res = ''
+    const length = s.length
+    if(length === 0) return res
+
+    const reg1 = /[a-z]/
+    const reg2 = /[A-Z]/
+
+    for(let i = 0;i<length;i++){
+        const c = s[i]
+        if(reg1.test(c)){
+            res += c.toUpperCase()
+        }else if(reg2.test(c)){
+            res += c.toLowerCase()
+        }else{
+            res += c
+        }
+    }
+    return res
+}
+```
+
+ASCII码方式
+```ts
+function switchLetterCase(s:string): string{
+    const res = ''
+    const length = s.length
+    if(length === 0) return res
+
+    const reg1 = /[a-z]/
+    const reg2 = /[A-Z]/
+
+    for(let i = 0;i<length;i++){
+        const c = s[i]
+        const code = c.charCodeAt(0)
+        if(code>=65&&code<=90){
+            res += c.toLowerCase()
+        }else if(code>=97&&code<=122){
+            res += c.toUpperCase()
+        }else{
+            res += c
+        }
+    }
+    return res
+}
+```
+
+
+## 为何0.1+0.2!==0.3
+计算机使用二进制存储数据，整数转换二进制没有误差，如9转换为二进制是1001，而小数可能无法用二进制准确表达，如0.2转换为1.1001100...。那转换不过来怎么办呢？我们也只能取其精度，忽略个第几位才行。不光是JS，其他编程语言也是一样的。那么在JS中的执行结果如下：
+![](/images/45.png)
+ 
+如果你经常操作0.1+0.2的小数的话，你可以使用第三方库，[https://www.npmjs.com/package/mathjs](https://www.npmjs.com/package/mathjs)
