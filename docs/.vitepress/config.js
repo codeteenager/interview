@@ -123,6 +123,10 @@ module.exports = {
                             link: "/web/browser",
                         },
                         {
+                            text: "代码输出结果",
+                            link: "/web/code-output",
+                        },
+                        {
                             text: "HR面试问题",
                             link: "/web/hr",
                         },

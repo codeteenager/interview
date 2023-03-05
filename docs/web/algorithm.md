@@ -103,6 +103,8 @@ class Stach{
     }
 }
 ```
+### LeetCode精选题目
+包含min函数的栈
 
 ## 队列
 队列是一种遵循先进先出原则的有序集合，添加新元素的一端称为队尾，另一端称为队首。
@@ -190,22 +192,65 @@ class queue{
 }
 ```
 
-### LeetCode精选题目
-包含min函数的栈
+## 链表
+链表是一种有序的数据结构，链表中的每个部分称为节点，链表在内存中不必是连续的空间，它的优点是添加与删除不会导致其他元素位移，缺点是无法根据索引快速定位元素。链表与栈队列的区别是链表可以从首尾以及中间位置进行数据操作。那么链表可以从首、尾、中间进行数据存取，那为什么不直接使用数组呢？大家都知道数组在内存中占用一段连续的空间，而添加、移除会导致后续元素位移，性能开销大。
+
+由于这种原因，那么有没有更好的存储方式能够去优化数组的相关功能，例如我们对一个数组经常添加移除。这时就需要链表来去优化。
+
+链表的实现：
+* 节点类：value存储当前节点的数据、next存储下一个节点的指针
+* 链表类：addAtTail尾部添加节点、addAtHead头部添加节点、addAtIndex指定位置添加节点、get获取节点、removeAtIndex删除指定节点
+
+```js
+//节点类
+class LinkedNode{
+    constructor(value){
+        this.value = value
+        //用于存储下一个节点的引用
+        this.next = null
+    }
+}
+//链表类
+class LinkedList{
+    constructor(){
+        this.count = 0
+        this.head = null
+    }
+    //添加节点(尾)
+    addAtTail(value){
+        //创建新节点
+        const node = new LinkedNode(value)
+        //检测链表是否存在数据
+        if(this.count === 0){
+            this.head = node
+            this.count++
+        }else{
+            //找到链表尾部节点，将最后一个节点的next设置为node
+            let cur = this.head
+            while(cur.next!=null){
+                cur = cur.next
+            }
+            cur.next = node
+            this.count++
+        }
+    }
+}
+```
+
 
 ## 排序算法复杂度
-|  排序算法 | 平均时间复杂度 | 最好情况 | 最坏情况 |空闲复杂度 | 排序方式 | 稳定性  |
-| -------  | ---------- | --------  |-------- | --------- | ------- | -------- |
-| 冒泡排序 | O(n^2) | O(n) | O(n^2) | O(1) | In-place | 稳定 |
-| 选择排序  | O(n^2) | O(n^2) |O(n^2) | O(1) | In-place | 不稳定 |
-| 插入排序  | O(n^2) | O(n) |O(n^2) | O(1) | In-place | 稳定 |
-| 希尔排序  | O(n log n) | O(n log^2 n) |O(n log^2 n) | O(1) | In-place | 不稳定 |
-| 归并排序  | O(n log n) | O(n log n) |O(n log n)  | O(n) |Out-place | 稳定 |
-| 快速排序  | O(n log n) | O(n log n) |O(n^2) | O(logn) | In-place | 不稳定 |
-| 堆排序  |O(n log n) | O(n log n) |O(n log n) | O(1) | In-place | 不稳定 |
-| 计数排序  | O(n + K) | O(n + K) | O(n + K)| O(k) | Out-place | 稳定 |
-| 桶排序  | O(n + k) | O(n + K)|O(n^2) | O(n + K) | Out-place | 稳定 |
-| 基数排序  | O(n x k) | O(n x k) | O(n x k) |O(n + K)| Out-place | 稳定 |
+| 排序算法 | 平均时间复杂度 | 最好情况     | 最坏情况     | 空闲复杂度 | 排序方式  | 稳定性 |
+| -------- | -------------- | ------------ | ------------ | ---------- | --------- | ------ |
+| 冒泡排序 | O(n^2)         | O(n)         | O(n^2)       | O(1)       | In-place  | 稳定   |
+| 选择排序 | O(n^2)         | O(n^2)       | O(n^2)       | O(1)       | In-place  | 不稳定 |
+| 插入排序 | O(n^2)         | O(n)         | O(n^2)       | O(1)       | In-place  | 稳定   |
+| 希尔排序 | O(n log n)     | O(n log^2 n) | O(n log^2 n) | O(1)       | In-place  | 不稳定 |
+| 归并排序 | O(n log n)     | O(n log n)   | O(n log n)   | O(n)       | Out-place | 稳定   |
+| 快速排序 | O(n log n)     | O(n log n)   | O(n^2)       | O(logn)    | In-place  | 不稳定 |
+| 堆排序   | O(n log n)     | O(n log n)   | O(n log n)   | O(1)       | In-place  | 不稳定 |
+| 计数排序 | O(n + K)       | O(n + K)     | O(n + K)     | O(k)       | Out-place | 稳定   |
+| 桶排序   | O(n + k)       | O(n + K)     | O(n^2)       | O(n + K)   | Out-place | 稳定   |
+| 基数排序 | O(n x k)       | O(n x k)     | O(n x k)     | O(n + K)   | Out-place | 稳定   |
 
 ## 判断字符串是否括号匹配
 一个字符串s可能包含{}()[]三种括号，判断s是否是括号匹配的，如(a{b}c)匹配，而{a(b或{a(b}c)就不匹配。

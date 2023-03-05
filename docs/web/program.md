@@ -650,3 +650,57 @@ async function fn() {
 }
 fn();
 ```
+
+## 手写模板字符串
+我们知道在ES6中，新增了反引号语法，使得反引号中可以插入变量，解析时可以将变量替换成实际值并且拼接到字符串中。这种模板字符串中变量的识别可以手写一个函数来简单实现：
+```js
+function render(templateStr, data) {
+  const reg = /\{\{\s*(\w+)\s*\}\}/;    // \{：匹配{，\用于转义
+  if (reg.test(templateStr)) {
+    // 挑出{{}}里面的属性，如name、age
+    const key = templateStr.match(reg)[1];
+    // replace方法不会修改原字符串
+    templateStr = templateStr.replace(reg, data[key]);
+    // 递归下去，直到没有{{}}为止
+    return render(templateStr, data);
+  } else {
+    return templateStr;
+  }
+}
+const templateStr = `
+  名字： {{ name }}
+  年龄： {{ age }}
+`;
+
+const data = {
+  name: 'clz',
+  age: 21
+};
+
+console.log(render(templateStr, data));
+```
+
+## 手写trim
+去掉字符串两边的空格。核心就是/^\s+|\s+$/这一段正则表达式，它会匹配字符串前后的空格，然后通过replace()把匹配到的部分替换成空串。
+
+* ^：匹配输入字符串的开始位置
+* \s：匹配任何空白字符。包括空格符、制表符、回车符、换行符等
+* |：a | b匹配a或 b
+* $：匹配输入字符串的结束位置
+
+```js
+function myTrim(str) {
+  const reg = /^\s+|\s+$/g;
+  return str.replace(reg, '');
+}
+
+const str1 = '   12 3';
+const str2 = '12 3   ';
+const str3 = '   12 3   ';
+const str4 = '12 3';
+
+console.log(myTrim(str1));  // 12 3
+console.log(myTrim(str2));  // 12 3
+console.log(myTrim(str3));  // 12 3
+console.log(myTrim(str4));  // 12 3
+```
