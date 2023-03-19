@@ -1,6 +1,6 @@
-<!-- # 代码输出结果
+# 代码输出结果
 
-**代码输出结果**也是面试中常考的题目，一段代码中可能涉及到很多的知识点，这就考察到了应聘者的基础能力。在前端面试中，常考的代码输出问题主要涉及到以下知识点：**异步编程、事件循环、this指向、作用域、变量提升、闭包、原型、继承**等，这些知识点往往不是单独出现的，而是在同一段代码中包含多个知识点。
+代码输出结果也是面试中常考的题目，一段代码中可能涉及到很多的知识点，这就考察到了应聘者的基础能力。在前端面试中，常考的代码输出问题主要涉及到以下知识点：异步编程、事件循环、this指向、作用域、变量提升、闭包、原型、继承等，这些知识点往往不是单独出现的，而是在同一段代码中包含多个知识点。
 
 
 ## 异步&事件循环
@@ -52,8 +52,6 @@ resolve1
 ```
 
 需要注意的是，直接打印promise1，会打印出它的状态值和参数。
-
-
 
 代码执行过程如下：
 
@@ -167,7 +165,7 @@ promise.then((res) => {
 then：success1
 ```
 
-这个题目考察的就是**Promise的状态在发生变化之后，就不会再发生变化**。开始状态由`pending`变为`resolve`，说明已经变为已完成状态，下面的两个状态的就不会再执行，同时下面的catch也不会捕获到错误。
+这个题目考察的就是Promise的状态在发生变化之后，就不会再发生变化。开始状态由`pending`变为`resolve`，说明已经变为已完成状态，下面的两个状态的就不会再执行，同时下面的catch也不会捕获到错误。
 
 ### 6. 代码输出结果
 
@@ -185,11 +183,9 @@ Promise.resolve(1)
 Promise {<fulfilled>: undefined}
 ```
 
-Promise.resolve方法的参数如果是一个原始值，或者是一个不具有then方法的对象，则Promise.resolve方法返回一个新的Promise对象，状态为resolved，Promise.resolve方法的参数，会同时传给回调函数。
+`Promise.resolve`方法的参数如果是一个原始值，或者是一个不具有then方法的对象，则`Promise.resolve`方法返回一个新的Promise对象，状态为resolved，`Promise.resolve`方法的参数，会同时传给回调函数。
 
-
-
-then方法接受的参数是函数，而如果传递的并非是一个函数，它实际上会将其解释为then(null)，这就会导致前一个Promise的结果会传递下面。
+then方法接受的参数是函数，而如果传递的并非是一个函数，它实际上会将其解释为`then(null)`，这就会导致前一个`Promise`的结果会传递下面。
 
 ### 7. 代码输出结果
 
@@ -244,11 +240,11 @@ Promise.resolve(1)
 2
 ```
 
-Promise是可以链式调用的，由于每次调用 `.then` 或者 `.catch` 都会返回一个新的 promise，从而实现了链式调用, 它并不像一般任务的链式调用一样return this。
+Promise是可以链式调用的，由于每次调用 `.then` 或者 `.catch` 都会返回一个新的 promise，从而实现了链式调用, 它并不像一般任务的链式调用一样`return this`。
 
 
 
-上面的输出结果之所以依次打印出1和2，是因为`resolve(1)`之后走的是第一个then方法，并没有进catch里，所以第二个then中的res得到的实际上是第一个then的返回值。并且return 2会被包装成`resolve(2)`，被最后的then打印输出2。
+上面的输出结果之所以依次打印出1和2，是因为`resolve(1)`之后走的是第一个then方法，并没有进catch里，所以第二个then中的res得到的实际上是第一个then的返回值。并且`return 2`会被包装成`resolve(2)`，被最后的then打印输出2。
 
 ### 9. 代码输出结果
 
@@ -302,9 +298,7 @@ Promise.resolve(1)
 1
 ```
 
-看到这个题目，好多的then，实际上只需要记住一个原则：`.then` 或`.catch` 的参数期望是函数，传入非函数则会发生**值透传**。
-
-
+看到这个题目，好多的then，实际上只需要记住一个原则：`.then` 或`.catch` 的参数期望是函数，传入非函数则会发生值透传。
 
 第一个then和第二个then中传入的都不是函数，一个是数字，一个是对象，因此发生了透传，将`resolve(1)` 的值直接传到最后一个then里，直接打印出1。
 
@@ -388,8 +382,8 @@ finally2后面的then函数 2
 
 - `.finally()`方法不管Promise对象最后的状态如何都会执行
 - `.finally()`方法的回调函数不接受任何的参数，也就是说你在`.finally()`函数中是无法知道Promise最终的状态是`resolved`还是`rejected`的
-- 它最终返回的默认会是一个上一次的Promise对象值，不过如果抛出的是一个异常则返回异常的Promise对象。
-- finally本质上是then方法的特例
+- 它最终返回的默认会是一个上一次的`Promise`对象值，不过如果抛出的是一个异常则返回异常的`Promise`对象。
+- `finally`本质上是then方法的特例
 
 
 
@@ -436,7 +430,7 @@ Promise.all([runAsync(1), runAsync(2), runAsync(3)]).then(res => console.log(res
 [1, 2, 3]
 ```
 
-首先，定义了一个Promise，来异步执行函数runAsync，该函数传入一个值x，然后间隔一秒后打印出这个x。
+首先，定义了一个`Promise`，来异步执行函数runAsync，该函数传入一个值x，然后间隔一秒后打印出这个x。
 
 
 
@@ -564,7 +558,7 @@ async1 end
 
 
 
-这里可以理解为await后面的语句相当于放到了new Promise中，下一行及之后的语句相当于放在Promise.then中。
+这里可以理解为await后面的语句相当于放到了`new Promise`中，下一行及之后的语句相当于放在`Promise.then`中。
 
 ### 19. 代码输出结果
 
@@ -716,7 +710,7 @@ setTimeout
 代码执行过程如下： 
 
 1. 开头定义了async1和async2两个函数，但是并未执行，执行script中的代码，所以打印出script start；
-2. 遇到定时器Settimeout，它是一个宏任务，将其加入到宏任务队列；
+2. 遇到定时器setTimeout，它是一个宏任务，将其加入到宏任务队列；
 3. 之后执行函数async1，首先打印出async1 start；
 4. 遇到await，执行async2，打印出async2，并阻断后面代码的执行，将后面的代码加入到微任务队列；
 5. 然后跳出async1和async2，遇到Promise，打印出promise1；
@@ -1122,7 +1116,7 @@ console.log(7);
 4. 遇到第二个定时器setTimeout，将其加入到红任务队列；
 5. 执行script代码，打印出7，至此第一轮执行完成；
 6. 指定微任务队列中的代码，打印出resolve的结果：5；
-7. 执行宏任务中的第一个定时器setTimeout，首先打印出2，然后遇到 Promise.resolve().then()，将其加入到微任务队列；
+7. 执行宏任务中的第一个定时器setTimeout，首先打印出2，然后遇到 `Promise.resolve().then()`，将其加入到微任务队列；
 8. 执行完这个宏任务，就开始执行微任务队列，打印出3；
 9. 继续执行宏任务队列中的第二个定时器，打印出6。
 
@@ -1569,7 +1563,7 @@ console.log(y.x)  // 6
 
 **解析：**
 
-1. 最关键的就是var x = a(5)，函数a是在全局作用域调用，所以函数内部的this指向window对象。**所以 this.x = 5 就相当于：window.x = 5。**之后 return this，也就是说 var x = a(5) 中的x变量的值是window，这里的x将函数内部的x的值覆盖了。然后执行console.log(x.x)， 也就是console.log(window.x)，而window对象中没有x属性，所以会输出undefined。
+1. 最关键的就是`var x = a(5)`，函数a是在全局作用域调用，所以函数内部的this指向window对象。所以 `this.x = 5` 就相当于：`window.x = 5`。之后 `return this`，也就是说 `var x = a(5)` 中的x变量的值是window，这里的x将函数内部的x的值覆盖了。然后执行`console.log(x.x)`， 也就是`console.log(window.x)`，而window对象中没有x属性，所以会输出undefined。
 2. 当指向y.x时，会给全局变量中的x赋值为6，所以会打印出6。
 
 ### 14. 代码输出结果
@@ -1629,7 +1623,7 @@ console.log(baz.a); // 3
 
 
 
-这道题目和上面题目差不多，主要都是考察this绑定的优先级。记住以下结论即可：**this绑定的优先级：****new绑定 > 显式绑定 > 隐式绑定 > 默认绑定。**
+这道题目和上面题目差不多，主要都是考察this绑定的优先级。记住以下结论即可：this绑定的优先级：new绑定 > 显式绑定 > 隐式绑定 > 默认绑定。
 
 ## 作用域&变量提升&闭包
 
@@ -1646,7 +1640,7 @@ console.log(z); // undefined
 console.log(x); // Uncaught ReferenceError: x is not defined
 ```
 
-这段代码的关键在于：var x = y = 1; 实际上这里是从右往左执行的，首先执行y = 1, 因为y没有使用var声明，所以它是一个全局变量，然后第二步是将y赋值给x，讲一个全局变量赋值给了一个局部变量，最终，x是一个局部变量，y是一个全局变量，所以打印x是报错。
+这段代码的关键在于：`var x = y = 1;` 实际上这里是从右往左执行的，首先执行y = 1, 因为y没有使用var声明，所以它是一个全局变量，然后第二步是将y赋值给x，讲一个全局变量赋值给了一个局部变量，最终，x是一个局部变量，y是一个全局变量，所以打印x是报错。
 
 ### 2. 代码输出结果
 
@@ -1703,7 +1697,7 @@ var friendName = 'World';
 
 
 
-我们知道，在 JavaScript中， Function 和 var 都会被提升（变量提升），所以上面的代码就相当于：
+我们知道，在 JavaScript中， `Function` 和 `var` 都会被提升（变量提升），所以上面的代码就相当于：
 
 ```js
 var name = 'World!';
@@ -1770,7 +1764,7 @@ function b() {
 a();
 ```
 
-在上面的两段代码中，第一段是可以正常输出，这个应该没啥问题，关键在于第二段代码，它会报错Uncaught ReferenceError: temp is not defined。这时因为在b方法执行时，temp 的值为undefined。
+在上面的两段代码中，第一段是可以正常输出，这个应该没啥问题，关键在于第二段代码，它会报错`Uncaught ReferenceError: temp is not defined`。这时因为在b方法执行时，temp 的值为undefined。
 
 ### 6. 代码输出结果
 
@@ -1912,13 +1906,13 @@ new new Foo().getName(); // 3
 
 **解析：**
 
-1. **Foo.getName()，**Foo为一个函数对象，对象都可以有属性，b 处定义Foo的getName属性为函数，输出2；
-2. **getName()，**这里看d、e处，d为函数表达式，e为函数声明，两者区别在于变量提升，函数声明的 5 会被后边函数表达式的 4 覆盖；
-3.  **Foo().getName()，**这里要看a处，在Foo内部将全局的getName重新赋值为 console.log(1) 的函数，执行Foo()返回 this，这个this指向window，Foo().getName() 即为window.getName()，输出 1；
-4. **getName()，**上面3中，全局的getName已经被重新赋值，所以这里依然输出 1；
-5. **new Foo.getName()，**这里等价于 new (Foo.getName())，先执行 Foo.getName()，输出 2，然后new一个实例；
-6. **new Foo().getName()，**这里等价于 (new Foo()).getName(), 先new一个Foo的实例，再执行这个实例的getName方法，但是这个实例本身没有这个方法，所以去原型链__protot__上边找，实例.__protot__ === Foo.prototype，所以输出 3；
-7. **new new Foo().getName()，**这里等价于new (new Foo().getName())，如上述6，先输出 3，然后new 一个 new Foo().getName() 的实例。
+1. `Foo.getName()，`Foo为一个函数对象，对象都可以有属性，b 处定义Foo的getName属性为函数，输出2；
+2. `getName()，`这里看d、e处，d为函数表达式，e为函数声明，两者区别在于变量提升，函数声明的 5 会被后边函数表达式的 4 覆盖；
+3.  `Foo().getName()，`这里要看a处，在Foo内部将全局的getName重新赋值为 `console.log(1)` 的函数，执行Foo()返回 this，这个this指向window，Foo().getName() 即为window.getName()，输出 1；
+4. `getName()，`上面3中，全局的getName已经被重新赋值，所以这里依然输出 1；
+5. `new Foo.getName()，`这里等价于 `new (Foo.getName())`，先执行 Foo.getName()，输出 2，然后new一个实例；
+6. `new Foo().getName()，`这里等价于 `(new Foo()).getName()`, 先new一个Foo的实例，再执行这个实例的getName方法，但是这个实例本身没有这个方法，所以去原型链__protot__上边找，`实例.__protot__ === Foo.prototype`，所以输出 3；
+7. `new new Foo().getName()，`这里等价于`new (new Foo().getName())`，如上述6，先输出 3，然后new 一个 `new Foo().getName()` 的实例。
 
 ### 3. 代码输出结果
 
@@ -1949,7 +1943,7 @@ b
 **解析：**
 
 1. f 并不是 Function 的实例，因为它本来就不是构造函数，调用的是 Function 原型链上的相关属性和方法，只能访问到 Object 原型链。所以 f.a() 输出 a  ，而 f.b() 就报错了。
-2. F 是个构造函数，而 F 是构造函数 Function 的一个实例。因为 F instanceof  Object === true，F instanceof Function === true，由此可以得出结论：F 是 Object 和 Function 两个的实例，即 F 能访问到 a， 也能访问到 b。所以 F.a() 输出 a ，F.b() 输出 b。
+2. F 是个构造函数，而 F 是构造函数 Function 的一个实例。因为 `F instanceof  Object === true`，`F instanceof Function === true`，由此可以得出结论：F 是 Object 和 Function 两个的实例，即 F 能访问到 a， 也能访问到 b。所以 F.a() 输出 a ，F.b() 输出 b。
 
 ### 4. 代码输出结果
 
@@ -1983,10 +1977,10 @@ Foo.a();
 
 **解析：**
 
-1. Foo.a() 这个是调用 Foo 函数的静态方法 a，虽然 Foo 中有优先级更高的属性方法 a，但 Foo 此时没有被调用，所以此时输出 Foo 的静态方法 a 的结果：4
-2. let obj = new Foo(); 使用了 new 方法调用了函数，返回了函数实例对象，此时 Foo 函数内部的属性方法初始化，原型链建立。
-3.  obj.a() ; 调用 obj 实例上的方法 a，该实例上目前有两个 a 方法：一个是内部属性方法，另一个是原型上的方法。当这两者都存在时，首先查找 ownProperty ，如果没有才去原型链上找，所以调用实例上的 a 输出：2
-4. Foo.a() ; 根据第2步可知 Foo 函数内部的属性方法已初始化，覆盖了同名的静态方法，所以输出：1
+1. `Foo.a()` 这个是调用 Foo 函数的静态方法 a，虽然 Foo 中有优先级更高的属性方法 a，但 Foo 此时没有被调用，所以此时输出 Foo 的静态方法 a 的结果：4
+2. `let obj = new Foo()`; 使用了 new 方法调用了函数，返回了函数实例对象，此时 Foo 函数内部的属性方法初始化，原型链建立。
+3.  `obj.a()` ; 调用 obj 实例上的方法 a，该实例上目前有两个 a 方法：一个是内部属性方法，另一个是原型上的方法。当这两者都存在时，首先查找 ownProperty ，如果没有才去原型链上找，所以调用实例上的 a 输出：2
+4. `Foo.a()` ; 根据第2步可知 Foo 函数内部的属性方法已初始化，覆盖了同名的静态方法，所以输出：1
 
 ### 5. 代码输出结果
 
@@ -2007,9 +2001,7 @@ console.log(Dog.prototype.constructor === Dog && dog.constructor === Dog && dog 
 
 **解析：**
 
-因为constructor是prototype上的属性，所以dog.constructor实际上就是指向Dog.prototype.constructor；constructor属性指向构造函数。instanceof而实际检测的是类型是否在实例的原型链上。
-
-
+因为constructor是prototype上的属性，所以dog.constructor实际上就是指向`Dog.prototype.constructor`；constructor属性指向构造函数。instanceof而实际检测的是类型是否在实例的原型链上。
 
 constructor是prototype上的属性，这一点很容易被忽略掉。constructor和instanceof 的作用是不同的，感性地来说，constructor的限制比较严格，它只能严格对比对象的构造函数是不是指定的值；而instanceof比较松散，只要检测的类型在原型链上，就会返回true。
 
@@ -2034,8 +2026,8 @@ console.log(c.n);
 
 **解析：**
 
-1. console.log(b.n)，在查找b.n是首先查找 b 对象自身有没有 n 属性，如果没有会去原型（prototype）上查找，当执行var b = new B()时，函数内部this.n=9999(此时this指向 b) 返回b对象，b对象有自身的n属性，所以返回 9999。
-2. console.log(c.n)，同理，当执行var c = new C()时，c对象没有自身的n属性，向上查找，找到原型 （prototype）上的 n 属性，因为 A.n++(此时对象A中的n为4400)， 所以返回4400。
+1. `console.log(b.n)`，在查找b.n是首先查找 b 对象自身有没有 n 属性，如果没有会去原型（prototype）上查找，当执行var b = new B()时，函数内部`this.n=9999`(此时this指向 b) 返回b对象，b对象有自身的n属性，所以返回 9999。
+2. `console.log(c.n)`，同理，当执行`var c = new C()`时，c对象没有自身的n属性，向上查找，找到原型 （prototype）上的 n 属性，因为 A.n++(此时对象A中的n为4400)， 所以返回4400。
 
 ### 7. 代码输出问题
 
@@ -2065,9 +2057,9 @@ console.log(new C(2).a);
 
 **解析：**
 
-1. console.log(new A().a)，new A()为构造函数创建的对象，本身没有a属性，所以向它的原型去找，发现原型的a属性的属性值为1，故该输出值为1；
-2. console.log(new B().a)，ew B()为构造函数创建的对象，该构造函数有参数a，但该对象没有传参，故该输出值为undefined;
-3. console.log(new C(2).a)，new C()为构造函数创建的对象，该构造函数有参数a，且传的实参为2，执行函数内部，发现if为真，执行this.a = 2,故属性a的值为2。
+1. `console.log(new A().a)`，new A()为构造函数创建的对象，本身没有a属性，所以向它的原型去找，发现原型的a属性的属性值为1，故该输出值为1；
+2. `console.log(new B().a)`，ew B()为构造函数创建的对象，该构造函数有参数a，但该对象没有传参，故该输出值为undefined;
+3. `console.log(new C(2).a)`，new C()为构造函数创建的对象，该构造函数有参数a，且传的实参为2，执行函数内部，发现if为真，执行`this.a = 2`,故属性a的值为2。
 
 ### 8 代码输出问题
 
@@ -2121,27 +2113,27 @@ child1.show(); // 5 [1,2,1,11,12] 5
 child2.show(); // 6 [1,2,1,11,12] 5
 ```
 
-这道题目值得神帝，他涉及到的知识点很多，例如**this的指向、原型、原型链、类的继承、数据类型**等。
+这道题目值得神帝，他涉及到的知识点很多，例如this的指向、原型、原型链、类的继承、数据类型等。
 
 
 
 **解析****：**
 
-1. parent.show()，可以直接获得所需的值，没啥好说的；
-2. child1.show()，`Child`的构造函数原本是指向`Child`的，题目显式将`Child`类的原型对象指向了`Parent`类的一个实例，需要注意`Child.prototype`指向的是`Parent`的实例`parent`，而不是指向`Parent`这个类。
-3. child2.show()，这个也没啥好说的；
-4. parent.show()，`parent`是一个`Parent`类的实例，`Child.prorotype`指向的是`Parent`类的另一个实例，两者在堆内存中互不影响，所以上述操作不影响`parent`实例，所以输出结果不变；
-5. child1.show()，`child1`执行了`change()`方法后，发生了怎样的变化呢?
+1. `parent.show()`，可以直接获得所需的值，没啥好说的；
+2. `child1.show()`，`Child`的构造函数原本是指向`Child`的，题目显式将`Child`类的原型对象指向了`Parent`类的一个实例，需要注意`Child.prototype`指向的是`Parent`的实例`parent`，而不是指向`Parent`这个类。
+3. `child2.show()`，这个也没啥好说的；
+4. `parent.show()`，`parent`是一个`Parent`类的实例，`Child.prorotype`指向的是`Parent`类的另一个实例，两者在堆内存中互不影响，所以上述操作不影响`parent`实例，所以输出结果不变；
+5. `child1.show()`，`child1`执行了`change()`方法后，发生了怎样的变化呢?
 
-- **this.b.push(this.a)，**由于this的动态指向特性，this.b会指向`Child.prototype`上的**b**数组,this.a会指向`child1`的**a**属性,所以`Child.prototype.b`变成了**[1,2,1,11]**;
-- **this.a = this.b.length，**这条语句中`this.a`和`this.b`的指向与上一句一致，故结果为`child1.a`变为**4**;
-- **this.c.demo = this.a++，**由于`child1`自身属性并没有**c**这个属性，所以此处的`this.c`会指向`Child.prototype.c`，`this.a`值为**4**，为原始类型，故赋值操作时会直接赋值，`Child.prototype.c.demo`的结果为**4**，而`this.a`随后自增为**5(4 + 1 = 5)。**
+- `this.b.push(this.a)，`由于this的动态指向特性，this.b会指向`Child.prototype`上的b数组,`this.a`会指向`child1`的a属性,所以`Child.prototype.b`变成了`[1,2,1,11]`;
+- `this.a = this.b.length，`这条语句中`this.a`和`this.b`的指向与上一句一致，故结果为`child1.a`变为4;
+- `this.c.demo = this.a++，`由于`child1`自身属性并没有c这个属性，所以此处的`this.c`会指向`Child.prototype.c`，`this.a`值为4，为原始类型，故赋值操作时会直接赋值，`Child.prototype.c.demo`的结果为4，而`this.a`随后自增为5(4 + 1 = 5)。
 
 1. `child2`执行了`change()`方法, 而`child2`和`child1`均是`Child`类的实例，所以他们的原型链指向同一个原型对象`Child.prototype`,也就是同一个`parent`实例，所以`child2.change()`中所有影响到原型对象的语句都会影响`child1`的最终输出结果。
 
-- **this.b.push(this.a)，**由于this的动态指向特性，this.b会指向`Child.prototype`上的**b**数组,this.a会指向`child2`的**a**属性,所以`Child.prototype.b`变成了**[1,2,1,11,12]**;
-- **this.a = this.b.length，**这条语句中`this.a`和`this.b`的指向与上一句一致，故结果为`child2.a`变为**5**;
-- **this.c.demo = this.a++，**由于`child2`自身属性并没有**c**这个属性，所以此处的`this.c`会指向`Child.prototype.c`，故执行结果为`Child.prototype.c.demo`的值变为`child2.a`的值**5**，而`child2.a`最终自增为**6(5 + 1 = 6)。**
+- `this.b.push(this.a)，`由于this的动态指向特性，this.b会指向`Child.prototype`上的b数组,`this.a`会指向`child2`的a属性,所以`Child.prototype.b`变成了`[1,2,1,11,12]`;
+- `this.a = this.b.length，`这条语句中`this.a`和`this.b`的指向与上一句一致，故结果为`child2.a`变为5;
+- `this.c.demo = this.a++，`由于`child2`自身属性并没有c这个属性，所以此处的`this.c`会指向`Child.prototype.c`，故执行结果为`Child.prototype.c.demo`的值变为`child2.a`的值5，而`child2.a`最终自增为6(5 + 1 = 6)。
 
 ### 9. 代码输出结果
 
@@ -2171,4 +2163,4 @@ console.log(instance.getSuperValue());
 
 
 
-实际上，这段代码就是在实现原型链继承，SubType继承了SuperType，本质是重写了SubType的原型对象，代之以一个新类型的实例。SubType的原型被重写了，所以instance.constructor指向的是SuperType。 -->
+实际上，这段代码就是在实现原型链继承，SubType继承了SuperType，本质是重写了SubType的原型对象，代之以一个新类型的实例。SubType的原型被重写了，所以instance.constructor指向的是SuperType。
