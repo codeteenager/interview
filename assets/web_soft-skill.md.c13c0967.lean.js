@@ -1,0 +1,1 @@
+import{_ as e,c as i,o as l,N as a}from"./chunks/framework.d71a8920.js";const f=JSON.parse('{"title":"软技能","description":"","frontmatter":{},"headers":[],"relativePath":"web/soft-skill.md","lastUpdated":1673281224000}'),o={name:"web/soft-skill.md"},t=a("",22),r=[t];function d(p,s,n,c,h,_){return l(),i("div",null,r)}const v=e(o,[["render",d]]);export{f as __pageData,v as default};

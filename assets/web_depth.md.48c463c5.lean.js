@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,N as l}from"./chunks/framework.d71a8920.js";const b=JSON.parse('{"title":"知识深度","description":"","frontmatter":{},"headers":[],"relativePath":"web/depth.md","lastUpdated":1673541866000}'),p={name:"web/depth.md"},e=l("",70),o=[e];function r(t,c,F,i,y,D){return a(),n("div",null,o)}const m=s(p,[["render",r]]);export{b as __pageData,m as default};
