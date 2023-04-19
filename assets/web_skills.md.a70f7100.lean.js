@@ -1,0 +1,1 @@
+import{_ as e,c as r,o as t,O as a}from"./chunks/framework.baa50ef8.js";const b=JSON.parse('{"title":"面试套路","description":"","frontmatter":{},"headers":[],"relativePath":"web/skills.md","lastUpdated":1671070985000}'),l={name:"web/skills.md"},n=a("",2),i=[n];function o(s,f,p,h,j,_){return t(),r("div",null,i)}const u=e(l,[["render",o]]);export{b as __pageData,u as default};

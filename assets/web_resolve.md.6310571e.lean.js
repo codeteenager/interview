@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,O as l}from"./chunks/framework.baa50ef8.js";const A=JSON.parse('{"title":"分析和解决问题","description":"","frontmatter":{},"headers":[],"relativePath":"web/resolve.md","lastUpdated":1673363211000}'),p={name:"web/resolve.md"},o=l("",61),e=[o];function r(c,t,F,y,D,i){return a(),n("div",null,e)}const b=s(p,[["render",r]]);export{A as __pageData,b as default};
