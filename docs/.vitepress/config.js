@@ -71,6 +71,10 @@ module.exports = {
                             text: "软技能",
                             link: "/web/soft-skill",
                         },
+                        {
+                            text: "写简历",
+                            link: "/web/resume",
+                        },
                     ],
                 },
                 {
