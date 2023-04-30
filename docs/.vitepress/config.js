@@ -1,4 +1,6 @@
-module.exports = {
+import { defineConfig } from 'vitepress'
+
+export default defineConfig({
     title: '前端面试宝典',
     description: '前端面试宝典',
     base: '/interview/',
@@ -10,6 +12,9 @@ module.exports = {
         ['link', { rel: 'icon', href: '/interview/favicon.ico' }]
     ],
     themeConfig: {
+        search: {
+            provider: 'local'
+        },
         nav: [
             {
                 text: '面试',
@@ -151,4 +156,4 @@ module.exports = {
             next: '下一页'
         }
     }
-}
+});
