@@ -12,8 +12,27 @@ export default defineConfig({
         ['link', { rel: 'icon', href: '/interview/favicon.ico' }]
     ],
     themeConfig: {
+        returnToTopLabel: "返回顶部",
+        darkModeSwitchLabel: "外观",
+        sidebarMenuLabel: "菜单",
         search: {
-            provider: 'local'
+            provider: 'local',
+            options: {
+                translations: {
+                    button: {
+                        buttonText: '搜索',
+                        buttonAriaLabel: '搜索'
+                    },
+                    modal: {
+                        noResultsText: '无法找到相关结果',
+                        resetButtonTitle: '清除查询条件',
+                        footer: {
+                            selectText: '选择',
+                            navigateText: '切换'
+                        }
+                    }
+                }
+            }
         },
         nav: [
             {
